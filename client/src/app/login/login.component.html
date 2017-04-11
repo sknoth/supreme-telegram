@@ -1,0 +1,38 @@
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--4-col"></div>
+  <div class="mdl-cell mdl-cell--4-col">
+    <h3>Sign Up or Sign in</h3>
+    <form [formGroup]='loginForm'>
+      <p>
+        <mdl-textfield label="First Name" type="text"
+          formControlName="name" floating-label></mdl-textfield>
+      </p>
+      <p>
+        <mdl-textfield label="Last Name" type="text"
+          formControlName="surname" floating-label></mdl-textfield>
+      </p>
+      <p>
+        Which breakfast do you want to play?<br/>
+        <mdl-radio value="Nurse" formControlName="role" mdl-ripple>Nurse</mdl-radio>
+        <mdl-radio value="Doctor" formControlName="role" mdl-ripple>Doctor</mdl-radio>
+      </p>
+      <p>
+        Create a new team or select an existing one:<br/>
+        <mdl-textfield label="new team" type="text"
+          formControlName="newTeam" floating-label></mdl-textfield><br/>
+        <mdl-select formControlName="team">
+          <!-- <mdl-option *ngFor="let p of people" [value]="p.id">{{p.name}}</mdl-option> -->
+          <mdl-option [value]="drwho">Dr. Who</mdl-option>
+          <mdl-option [value]="sherlok">Sherlok</mdl-option>
+          <mdl-option [value]="drhouse">Dr. House</mdl-option>
+        </mdl-select>
+      </p>
+<!-- routerLink="/gamemap" -->
+      <button (click)="onSubmit()" type="button"
+        mdl-button mdl-button-type="raised" mdl-colored="primary" mdl-ripple>
+        Sign In
+      </button>
+    </form>
+  </div>
+  <div class="mdl-cell mdl-cell--4-col"></div>
+</div>
