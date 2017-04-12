@@ -10,6 +10,7 @@ import {
   Validators,
   FormControl
 } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { UserService } from '../user.service';
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     @Inject(FormBuilder) _formBuilder : FormBuilder,
-    private _userService: UserService
+    private _userService: UserService,
+    private _router: Router
   ) {
 
     this.loginForm = _formBuilder.group( {
@@ -49,7 +51,10 @@ export class LoginComponent implements OnInit {
     };
 
     this._userService.addUser(user).subscribe(
-      (data) => console.log(data)
+      (data) => {
+        console.log(data);
+        this._router.navigate(['gamemap']);
+      }
     );
   }
 
