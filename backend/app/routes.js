@@ -95,9 +95,11 @@ module.exports = function(app) {
 
         if (err)
           return res.send({ message: 'error with request' });
+console.log(req.body);
 
-        user.points = req.body.user.points || 0;
-        user.name = req.body.user.name || '';
+        user.name = req.body.name || '';
+        user.surname = req.body.surname || '';
+        user.role = req.body.role || '';
 
   			user.save(function(err) {
 

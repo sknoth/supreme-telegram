@@ -5,8 +5,7 @@ var mongoose = require('mongoose');
 var userSchema = mongoose.Schema({
     name: String,
     surname: String,
-    role: String,
-    team: String
+    role: String
 });
 
 // create the model for users and expose it to our app
