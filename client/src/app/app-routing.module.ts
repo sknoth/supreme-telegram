@@ -5,11 +5,13 @@ import { GamemapComponent } from './gamemap/gamemap.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { ChatComponent } from './chat/chat.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 const routes: Routes = [
   {
     path: '',
-    children: []
+    redirectTo: '/login',
+    pathMatch: 'full'
   },
   {
     path: 'gamemap',
@@ -26,6 +28,10 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatComponent
+  },
+  {
+    path: 'lobby',
+    component: LobbyComponent
   }
 ];
 

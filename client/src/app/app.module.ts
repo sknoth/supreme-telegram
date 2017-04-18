@@ -14,6 +14,7 @@ import { AdminComponent } from './admin/admin.component';
 
 import { UserService } from './user.service';
 import { ChatComponent } from './chat/chat.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ChatComponent } from './chat/chat.component';
     GamemapComponent,
     LoginComponent,
     AdminComponent,
-    ChatComponent
+    ChatComponent,
+    LobbyComponent
   ],
   imports: [
     BrowserModule,
