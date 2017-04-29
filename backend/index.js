@@ -1,7 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var bodyParser   = require('body-parser');
-var port     = process.env.PORT || 8080;
+var port     = process.env.PORT || 3000;
 var mongoose = require('mongoose');
 var io = require('socket.io')(http);
 
@@ -35,8 +35,8 @@ io.on('connection', function(socket) {
      io.emit('chat message', msg);
   });
 
-  socket.on('add-message', (message) => {
-    io.emit('message', {type:'new-message', text: message});
+  socket.on('add-message',function (message) {
+      io.emit('message', {type:'new-message', text: message});
   });
   
   socket.on('disconnect', function(){

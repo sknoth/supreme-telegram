@@ -1,0 +1,4 @@
+Logic:
+1. The admin/expert setups the scenario for the game (Scenario Object,Patient Object has been created)
+2. The game has been created (Game object, Result Object has been created, Game Object has been updated with scenario ObjectId and result ObjectId)
+3. User starts to login (User object has been created, Game Object has been updated with the user's ObjectId)
