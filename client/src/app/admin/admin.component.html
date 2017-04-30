@@ -1,5 +1,29 @@
-<h3>Admin Panel</h3>
-<p>Showing all users:</p>
-<ul>
-  <li *ngFor="let user of users">{{user.name}}, {{user.surname}}, {{user.role}}, {{user.team}}, </li>
-</ul>
+<h1>
+  Scenarios:
+</h1>
+
+<ng2-md-datatable selectable>
+  <ng2-md-datatable-header>
+    <ng2-md-datatable-column sortableValue="_id" >ID</ng2-md-datatable-column>
+    <ng2-md-datatable-column sortableValue="name" >Name</ng2-md-datatable-column>
+    <ng2-md-datatable-column sortableValue="description">Description</ng2-md-datatable-column>
+    <ng2-md-datatable-column sortableValue="duration" numeric>Duration (min)</ng2-md-datatable-column>
+  </ng2-md-datatable-header>
+
+  <tbody>
+  <ng2-md-datatable-row *ngFor="let scenario of scenarios$ | async" [selectableValue]="scenario._id">
+    <td >{{ scenario._id }}</td>
+    <td>{{ scenario.name }}</td>
+    <td>{{ scenario.description }}</td>
+    <td class="numeric">{{ scenario.duration }}</td>
+  </ng2-md-datatable-row>
+  </tbody>
+</ng2-md-datatable>
+
+<ng2-md-datatable-pagination
+  [currentPage]="currentPage"
+  [itemsPerPage]="itemsPerPage"
+  [itemsCount]="totalCount"
+  [itemsPerPageChoices]="[5, 10, 15]"></ng2-md-datatable-pagination>
+
+<a md-raised-button (click)="shuffleData()">SHUFFLE DATA</a>

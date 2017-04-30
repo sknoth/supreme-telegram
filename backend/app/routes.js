@@ -1,6 +1,43 @@
 var User = require('../app/models/user');
+var scenarioCtrl = require('./controllers/scenarioCtrl');
+
 
 module.exports = function(app) {
+
+    app.post('/scenario',function (req,res) {
+
+        scenarioCtrl.createScenario(req,function (result) {
+            if(result != null){
+                res.send(result);
+            }
+            else{
+                res.send("ERROR");
+            }
+        })
+
+    });
+
+
+    app.post('/patient',function (req,res) {
+
+        scenarioCtrl.addPatient(req,res);
+
+    });
+
+    app.get('/scenarios',function (req,res) {
+
+        scenarioCtrl.getAllScenarios(function (result) {
+            if(result != null){
+                res.send({data:result});
+            }
+            else{
+                res.send("ERROR");
+            }
+        })
+
+    });
+
+
 
     /**
      * Adds a new user to User table
