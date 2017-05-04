@@ -9,21 +9,22 @@ var ObjectId = require('mongoose').Types.ObjectId;
 module.exports.createScenario = function (req,callback) {
 
     var newScenario = new Scenario();
-    newScenario.name = req.body.scenarioName;
-    newScenario.description = req.body.scenarioDescription;
-    newScenario.nPatients = req.body.numberOfPatient;
+    newScenario.name = req.body.name;
+    newScenario.description = req.body.description;
+    newScenario.nPatients = req.body.nPatients;
     newScenario.duration = req.body.duration;
     newScenario.patients = [];
-    newScenario.maxReservedNurses = req.body.numberOfReservedNurses;
-    newScenario.nBusyRooms = req.body.numberOfOccupiedRooms;
+    newScenario.maxReservedNurses = req.body.maxReservedNurses;
+    newScenario.nBusyRooms = req.body.nBusyRooms;
     newScenario.info_bakjour = req.body.info_bakjour;
+    newScenario.metana_report = req.body.metana_report;
 
     newScenario.save(function (error,result) {
         if(!error){
            callback(result);
         }
         else{
-            console.log("Error:Create a new Scenario " + error);
+            console.log("Error:Create a new IScenario " + error);
             callback(null);
         }
     });
@@ -38,17 +39,18 @@ module.exports.addPatient = function (req,res) {
     PatientCtrl.createPatient(req,function (newPatient) {
         if(newPatient!=null){
             //get scenario by id
-            this.getScenarioById(scenarioId,function (scenario) {
+
+            getScenarioById(scenarioId,function (scenario) {
                 if(scenario!=null){
                     scenario.patients.push(newPatient._id);
 
                     scenario.save(function (error,updatedScenario) {
                         if(!error){
-                            res.send("OK");
+                            res.send({result:"OK"});
                             console.log(updatedScenario);
                         }
                         else{
-                            res.send("Something went wrong");
+                            res.send({result:"Something went wrong"});
                             console.log("Error update scenario with id: " + scenarioId);
                         }
                     })
@@ -75,6 +77,19 @@ module.exports.getScenarioById = function (scenarioId,callback) {
        }
     });
 };
+
+function getScenarioById(scenarioId,callback) {
+    Scenario.findOne({_id:new ObjectId(scenarioId.toString())},function (error,scenario) {
+        if(!error){
+            callback(scenario);
+        }
+        else{
+            console.log("ERROR:getting scenario with id: " + scenarioId);
+            callback(null);
+        }
+    });
+}
+
 
 /**
  * Get all scenarios

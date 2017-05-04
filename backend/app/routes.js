@@ -37,6 +37,19 @@ module.exports = function(app) {
 
     });
 
+    app.get('/scenario/:id',function (req,res) {
+        console.log(req.params.id);
+        scenarioCtrl.getScenarioById(req.params.id,function (result) {
+            if(result != null){
+                res.send(result);
+            }
+            else{
+                res.send("ERROR");
+            }
+        })
+
+    });
+
 
 
     /**

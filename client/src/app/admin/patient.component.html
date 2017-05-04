@@ -1,0 +1,10 @@
+<!--This is parent view-->
+
+<form class="patient-form" [formGroup]="patientForm" (ngSubmit)="onSubmit($event)">
+     <!--child view:form-->
+    <!--<app-patient-detail [title] = "title" [identificator]="identificator" [group]="patientForm"></app-patient-detail>-->
+
+     <app-patient-detail [title] = "title"  [identificator]="identificator"  [group]="patientForm"></app-patient-detail>
+
+    <button md-raised-button type="submit">{{isAllPatient? 'Done' : 'Next'}}</button>
+</form>

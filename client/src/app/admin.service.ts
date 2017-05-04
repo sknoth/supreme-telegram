@@ -8,13 +8,13 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import {DatatableSortType} from "ng2-md-datatable";
-import { Scenario, PaginableScenarios } from './admin.interfaces';
+import {IPatient, IScenario, PaginableScenarios} from './admin.interfaces';
 
 @Injectable()
 export class AdminService {
 
   private serverURL = 'http://localhost:3000';
-  private scenarios: Scenario[];
+  private scenarios: IScenario[];
 
   constructor(
     private _http: Http
@@ -24,17 +24,23 @@ export class AdminService {
   getScenarios(){
     console.log("Get all scenarios from database");
     return this._http.get(this.serverURL + "/scenarios")
-      .map(data => {  return <Scenario[]>data.json().data; })
+      .map(data => {  return <IScenario[]>data.json().data; })
       .catch(this.handleError);
   }
 
-  getScenariosData(allScenarios:Scenario[],page:number,limit:number,sortBy?:string,sortType?:DatatableSortType):PaginableScenarios{
+  getScenario(scenarioId:string){
+    console.log("Get scenario by id " + scenarioId);
+    return this._http.get(this.serverURL + "/scenario/" + scenarioId)
+      .map(data => {  return <IScenario>data.json(); })
+      .catch(this.handleError);
+  }
+  getScenariosData(allScenarios:IScenario[], page:number, limit:number, sortBy?:string, sortType?:DatatableSortType):PaginableScenarios{
 
     const offset = (page - 1) * limit;
 
     let scenarios;
     if(sortBy){
-      scenarios = allScenarios.sort((scenario1: Scenario, scenario2: Scenario) => {
+      scenarios = allScenarios.sort((scenario1: IScenario, scenario2: IScenario) => {
         switch (sortType) {
           case 0:
           case 1:
@@ -64,7 +70,20 @@ export class AdminService {
   }
 
 
+  createScenario(scenario:IScenario):Observable<IScenario>{
 
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this._http.post(this.serverURL + '/scenario', scenario,options)
+      .map(res => { return  <IScenario>res.json()});
+  }
+
+  createPatient(patient:IPatient){
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this._http.post(this.serverURL + '/patient', patient,options)
+      .map(res => { console.log(res.json());return  res.json()});
+  }
 
 
   /*example of post request

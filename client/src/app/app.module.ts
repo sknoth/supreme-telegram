@@ -6,20 +6,28 @@ import { MdlModule } from '@angular-mdl/core';
 import { MdlPopoverModule } from '@angular-mdl/popover';
 import { MdlSelectModule } from '@angular-mdl/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+
 import { MdDataTableModule } from 'ng2-md-datatable';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GamemapComponent } from './gamemap/gamemap.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
+import {ScenarioComponent} from './admin/scenario.component';
+import {PatientComponent} from './admin/patient.component';
+import {PatientDetailComponent} from './admin/patient-detail.component';
+import { ChatComponent } from './chat/chat.component';
 
 
 
 import { UserService } from './user.service';
-import { ChatComponent } from './chat/chat.component';
 import {AdminService} from "./admin.service";
+
+
+//Material components used in this application
+import { MaterialModule } from '@angular/material';
 
 
 @NgModule({
@@ -29,7 +37,9 @@ import {AdminService} from "./admin.service";
     LoginComponent,
     AdminComponent,
     ChatComponent,
-
+    ScenarioComponent,
+    PatientComponent,
+    PatientDetailComponent
 
   ],
   imports: [
@@ -42,7 +52,9 @@ import {AdminService} from "./admin.service";
     MdlPopoverModule,
     MdlSelectModule,
     MdDataTableModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+
+    MaterialModule.forRoot() //deprecated!!!
 
   ],
   providers: [UserService,AdminService],

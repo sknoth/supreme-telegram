@@ -12,14 +12,14 @@ var patientSchema = mongoose.Schema({
     name: String,
     age: Number,
     gender:String,
-    type:String,//[RED,ORANGE,YELLOW,GREEN,BLACK]
+    triage:String,//[RED,ORANGE,YELLOW,GREEN,BLACK]
     injures: [{type:String}], //list of injures
     airway:Object,//{type:[OK, THREAD,BLOCKED],description:String}
     breathing:Object, //{RP:[Fast >30,Normal >10 >30,etc.],SPO2:String,CIANOSIS:[etc.], description:String}
     circulation:Object,//similar to breathing see table from the scenario + casuality card
     disability:Object,//similar to breathing see table from the scenario + casuality card
     exposure:Object,//similar to breathing see table from the scenario + casuality card
-    treatments:[], //list of treatment for this patient as String
+
 
     /**Updated fields**/
     provided_treatments:[],// list of treatments has been chosen by a nurse/team

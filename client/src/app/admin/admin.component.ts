@@ -1,9 +1,9 @@
 import { Component, OnInit,AfterViewInit, OnDestroy,ViewChild } from '@angular/core';
-
+import {Router} from '@angular/router';
 //import { UserService } from '../user.service';
 
 
-import { Scenario } from '../admin.interfaces';
+import { IScenario } from '../admin.interfaces';
 import {AdminService} from '../admin.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -31,8 +31,9 @@ import {
 })
 export class AdminComponent implements OnInit,AfterViewInit, OnDestroy {
 
-  scenarios: Scenario[];
-  scenarios$: Observable<Scenario[]>;
+
+  scenarios: IScenario[];
+  scenarios$: Observable<IScenario[]>;
 
 
   currentPage: number;
@@ -45,10 +46,10 @@ export class AdminComponent implements OnInit,AfterViewInit, OnDestroy {
   @ViewChild(MdDataTableComponent) datatable: MdDataTableComponent;
   @ViewChild(MdDataTablePaginationComponent) pagination: MdDataTablePaginationComponent;
 
-  private _scenarios$: BehaviorSubject<Scenario[]> = new BehaviorSubject<Scenario[]>([]);
+  private _scenarios$: BehaviorSubject<IScenario[]> = new BehaviorSubject<IScenario[]>([]);
   private unmount$: Subject<void> = new Subject<void>();
 
-  constructor(private _adminService: AdminService) {
+  constructor(private _adminService: AdminService, private router: Router) {
     this.scenarios$ = this._scenarios$;
   }
 
@@ -89,12 +90,12 @@ export class AdminComponent implements OnInit,AfterViewInit, OnDestroy {
   }
 
   shuffleData() {
-    const currentScenarios: Scenario[] = this._scenarios$.getValue();
+    const currentScenarios: IScenario[] = this._scenarios$.getValue();
     this._scenarios$.next(shuffle(currentScenarios));
   }
 
   private fetchDataSource(
-    data:Scenario[]=this.scenarios,
+    data:IScenario[]=this.scenarios,
     page: number = this.currentPage,
     limit: number = this.itemsPerPage,
     sortBy: string = this.currentSortBy,
@@ -113,6 +114,13 @@ export class AdminComponent implements OnInit,AfterViewInit, OnDestroy {
     this.itemsPerPage = pagination.itemsPerPage;
     this.totalCount = pagination.totalCount;
     this.currentSelection = [];
+  }
+
+
+  createScenario(){
+    console.log("create scenario click ");
+    this.router.navigate(['/scenario']);
+
   }
 
 }

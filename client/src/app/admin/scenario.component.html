@@ -1,0 +1,75 @@
+<form class="scenario-form" [formGroup]="scenarioForm" (ngSubmit)="onSubmit($event)">
+  <!--IScenarioario name-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Scenario Name: </label></td>
+    <td><md-input-container class="input-full-width">
+      <input mdInput placeholder="Car Accident" formControlName="name">
+    </md-input-container></td>
+  </tr></table>
+
+
+  <!--Duration of the Game-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Duration of the Game: </label></td>
+    <td><md-select placeholder="15 min" [(ngModel)]="duration" formControlName="duration" class="input-full-width">
+      <md-option *ngFor="let d of durations" [value]="d.value">
+        {{d.viewValue}}
+      </md-option>
+    </md-select></td>
+  </tr></table>
+
+
+
+  <!--Total number of patient-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Total number of patients: </label></td>
+    <td><md-input-container class="input-full-width">
+      <input mdInput placeholder="8" type="number" formControlName="nPatients">
+    </md-input-container></td>
+  </tr></table>
+
+
+  <!--Max number of reserved nurses-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Max N of reserved nurses: </label></td>
+    <td><md-input-container class="input-full-width">
+      <input mdInput placeholder="5" type="number" formControlName="maxReservedNurses">
+    </md-input-container></td>
+  </tr></table>
+
+
+  <!--Number of occupied rooms at the hospital-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Number of occupied rooms at the hospital: </label></td>
+    <td><md-input-container class="input-full-width">
+      <input mdInput placeholder="4" type="number" formControlName="nBusyRooms">
+    </md-input-container></td>
+  </tr></table>
+
+  <!--Describe a catastrophe situation in 2-3 sentences-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Describe a catastrophe situation in 2-3 sentences: </label></td>
+    <td><md-input-container class="example-full-width">
+      <textarea mdInput formControlName="description" placeholder="Example: A car and a minivan collide on the main road 10 km north of Hovmantorp.  Eight people are injured in the accident. It has been a violent crash, as both the car and minivan were driving more than 70km/h."></textarea>
+    </md-input-container></td>
+  </tr></table>
+
+  <!--Describe a Metana Report-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">METANA report: </label></td>
+    <td><md-input-container class="example-full-width">
+      <textarea mdInput formControlName="metana_report" placeholder="Example: "></textarea>
+    </md-input-container></td>
+  </tr></table>
+
+  <!--Information that Bakjour Kirurg Provides:-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Bakjour Kirurg Info: </label></td>
+    <td><md-input-container class="input-full-width">
+      <input mdInput placeholder="One word" formControlName="info_bakjour">
+    </md-input-container></td>
+  </tr></table>
+
+  <button md-raised-button type="submit">Describe Patients</button>
+
+</form>

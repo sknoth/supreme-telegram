@@ -1,0 +1,318 @@
+
+<h2>
+  <!--Patient Title/Identificator-->
+  {{title}}
+</h2>
+
+<div [formGroup]="patientForm">
+
+
+  <!--<md-input-container class="input-full-width">-->
+    <!--<input mdInput  ng-show="false" formControlName="identificator" value="{{identificator}}">-->
+  <!--</md-input-container>-->
+  <!--IPatient name-->
+    <table class="input-full-width" cellspacing="0"><tr>
+      <td><label class="input-full-width">Name: </label></td>
+      <td><md-input-container class="input-full-width">
+        <input mdInput placeholder="Suize" formControlName="name">
+      </md-input-container></td>
+    </tr></table>
+
+    <!--IPatient age-->
+    <table class="input-full-width" cellspacing="0"><tr>
+      <td><label class="input-full-width">Age: </label></td>
+      <td><md-input-container class="input-full-width">
+        <input mdInput placeholder="25" type="number" formControlName="age">
+      </md-input-container></td>
+    </tr></table>
+
+  <!--IPatient gender-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Gender: </label></td>
+    <td><md-select placeholder="Gender" [(ngModel)]="gender" formControlName="gender" class="input-full-width">
+      <md-option *ngFor="let g of genders" [value]="g.value">
+        {{g.viewValue}}
+      </md-option>
+    </md-select></td>
+  </tr></table>
+
+
+  <!--IPatient gender-->
+  <table class="input-full-width" cellspacing="0"><tr>
+    <td><label class="input-full-width">Triage: </label></td>
+    <td><md-select placeholder="Red" [(ngModel)]="triage" formControlName="triage" class="input-full-width">
+      <md-option *ngFor="let tr of triages" [value]="tr.value">
+        {{tr.viewValue}}
+      </md-option>
+    </md-select></td>
+  </tr></table>
+
+  <label class="input-full-width">Specify Injures: </label>
+
+  <md-tab-group>
+    <!--AIRWAY START-->
+    <md-tab label="Airway">
+      <div formGroupName="airway">
+
+        <table class="input-full-width" cellspacing="0"><tr>
+          <td>
+            <md-radio-group class="example-radio-group" [(ngModel)]="type" formControlName="type">
+              <md-radio-button class="example-radio-button" *ngFor="let air of airways" [value]="air">
+                {{air}}
+              </md-radio-button>
+            </md-radio-group>
+          </td>
+          <td>
+            <label class="input-full-width">Correct Treatments: </label>
+
+
+                <div formArrayName="alltreatments">
+                  <div *ngFor="let treatment of patientForm.controls.airway.controls.alltreatments.controls; let i=index" >
+                     <div formGroupName="{{i}}">
+                         <md-checkbox  id="treatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                         <label attr.for="treatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                     </div>
+                  </div>
+                </div>
+
+
+          </td>
+        </tr></table>
+
+        <label class="input-full-width">Short Description: </label>
+        <md-input-container class="example-full-width">
+          <textarea mdInput formControlName="description" placeholder="Example: "></textarea>
+        </md-input-container>
+
+      </div>
+    </md-tab>
+    <!--AIRWAY END-->
+
+    <!--BREATHING START-->
+    <md-tab label="Breathing">
+
+      <div formGroupName="breathing">
+        <table class="input-full-width" cellspacing="0"><tr>
+                <td>
+                  <table class="input-full-width" cellspacing="0"><tr>
+                    <td><label class="input-full-width">AF: </label></td>
+                    <td><md-input-container class="input-full-width">
+                      <input mdInput placeholder="20" type="number" formControlName="af">
+                    </md-input-container></td>
+                  </tr></table>
+
+                  <table class="input-full-width" cellspacing="0"><tr>
+                    <td><label class="input-full-width">SPO2,%: </label></td>
+                    <td><md-input-container class="input-full-width">
+                      <input mdInput placeholder="90" type="number" formControlName="spo2">
+                    </md-input-container></td>
+                  </tr></table>
+
+                  <table class="input-full-width" cellspacing="0"><tr>
+                    <td><label class="input-full-width">Breathing frequency: </label></td>
+                    <td><md-input-container class="input-full-width">
+                      <input mdInput placeholder="10" type="number" formControlName="bfrequency">
+                    </md-input-container></td>
+                  </tr></table>
+                </td>
+                <td>
+                  <label class="input-full-width">Correct Treatments: </label>
+                  <div formArrayName="alltreatments">
+                    <div *ngFor="let treatment of patientForm.controls.breathing.controls.alltreatments.controls; let i=index" >
+                      <div formGroupName="{{i}}">
+                        <md-checkbox  id="breathingtreatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                        <label attr.for="breathingtreatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+        </tr></table>
+
+            <label class="input-full-width">Short Description: </label>
+            <md-input-container class="example-full-width">
+              <textarea mdInput formControlName="description" placeholder="Example: Snoring sound while breathing "></textarea>
+            </md-input-container>
+
+      </div>
+    </md-tab>
+    <!--BREATHING END-->
+
+
+    <!--CIRCULATION START-->
+    <md-tab label="Circulation">
+
+      <div formGroupName="circulation">
+
+        <table class="input-full-width" cellspacing="0"><tr>
+          <td>
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">BT: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="140/80"  formControlName="bt">
+              </md-input-container></td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Pulse: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="90" type="number" formControlName="pulse">
+              </md-input-container></td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Skin: </label></td>
+              <td>
+                <md-radio-group class="example-radio-group" [(ngModel)]="skinType" formControlName="skinType">
+                  <md-radio-button class="example-radio-button" *ngFor="let skin of skinTypes" [value]="skin">
+                    {{skin}}
+                  </md-radio-button>
+                </md-radio-group>
+
+              </td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Mucus color: </label></td>
+              <td>
+                <md-radio-group class="example-radio-group" [(ngModel)]="mucusColor" formControlName="mucusColor">
+                  <md-radio-button class="example-radio-button" *ngFor="let color of mucusColors" [value]="color">
+                    {{color}}
+                  </md-radio-button>
+                </md-radio-group>
+
+              </td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Capillary refill: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder=">2s"  formControlName="capillary">
+              </md-input-container></td>
+            </tr></table>
+
+          </td>
+          <td>
+            <label class="input-full-width">Correct Treatments: </label>
+            <div formArrayName="alltreatments">
+              <div *ngFor="let treatment of patientForm.controls.circulation.controls.alltreatments.controls; let i=index" >
+                <div formGroupName="{{i}}">
+                  <md-checkbox  id="circulationtreatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                  <label attr.for="circulationtreatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr></table>
+
+        <label class="input-full-width">Short Description: </label>
+        <md-input-container class="example-full-width">
+          <textarea mdInput formControlName="description" placeholder="Example: Snoring sound while breathing "></textarea>
+        </md-input-container>
+      </div>
+
+    </md-tab>
+    <!--CIRCULATION END-->
+
+
+    <!--DISABILITY START-->
+    <md-tab label="Disability">
+
+      <div formGroupName="disability">
+
+        <table class="input-full-width" cellspacing="0"><tr>
+          <td>
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">RLS: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="RLS1"  formControlName="rls">
+              </md-input-container></td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">GCS: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="15"  formControlName="gcs">
+              </md-input-container></td>
+            </tr></table>
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Glucose: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="6"  formControlName="glucose">
+              </md-input-container></td>
+            </tr></table>
+
+
+          </td>
+
+          <td>
+            <label class="input-full-width">Correct Treatments: </label>
+            <div formArrayName="alltreatments">
+              <div *ngFor="let treatment of patientForm.controls.disability.controls.alltreatments.controls; let i=index" >
+                <div formGroupName="{{i}}">
+                  <md-checkbox  id="disabilitytreatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                  <label attr.for="disabilitytreatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                </div>
+              </div>
+            </div>
+          </td>
+
+        </tr></table>
+
+        <label class="input-full-width">Short Description: </label>
+        <md-input-container class="example-full-width">
+          <textarea mdInput formControlName="description" placeholder="Example: right pupil are wide "></textarea>
+        </md-input-container>
+
+      </div>
+    </md-tab>
+
+    <!--DISABILITY END-->
+
+    <!--EXPOSURE START-->
+    <md-tab label="Exposure">
+
+      <div formGroupName="exposure">
+
+        <table class="input-full-width" cellspacing="0"><tr>
+          <td>
+
+
+            <table class="input-full-width" cellspacing="0"><tr>
+              <td><label class="input-full-width">Temperature: </label></td>
+              <td><md-input-container class="input-full-width">
+                <input mdInput placeholder="35.0" type="number" formControlName="temperature">
+              </md-input-container></td>
+            </tr></table>
+
+
+          </td>
+          <td>
+            <label class="input-full-width">Correct Treatments: </label>
+            <div formArrayName="alltreatments">
+              <div *ngFor="let treatment of patientForm.controls.exposure.controls.alltreatments.controls; let i=index" >
+                <div formGroupName="{{i}}">
+                  <md-checkbox  id="exposuretreatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                  <label attr.for="exposuretreatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr></table>
+
+        <label class="input-full-width">Short Description: </label>
+        <md-input-container class="example-full-width">
+          <textarea mdInput formControlName="description" placeholder="Example: right pupil are wide "></textarea>
+        </md-input-container>
+
+      </div>
+
+    </md-tab>
+    <!--EXPOSURE END-->
+  </md-tab-group>
+
+
+
+</div>
+
+
