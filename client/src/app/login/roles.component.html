@@ -1,0 +1,78 @@
+Welcome {{name}}
+
+<h2> Select Your Role</h2>
+
+<table>
+  <tr>
+    <td>
+      <!--LEADER CARD-->
+      <md-card class="role-card">
+        <md-card-header>
+          <!--<div md-card-avatar class="login-header-image"></div>-->
+          <md-card-title>LEADER</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+        <img md-card-image src="../assets/leader_square.png">
+        <md-card-content>
+          <p>Takes disicions about the allocation of resources.
+            Decides which team (nurse+doctor) will take care
+            of the patient and in which room.
+          </p>
+        </md-card-content>
+
+        <md-card-actions>
+          {{leader_disabled}}
+          <button md-button md-raised-button [disabled]="leader_disabled" (click)="setRole('LEADER');">SELECT</button>
+        </md-card-actions>
+      </md-card>
+    </td>
+
+    <td>
+      <!--NURSE CARD-->
+      <md-card class="role-card">
+        <md-card-header>
+          <!--<div md-card-avatar class="login-header-image"></div>-->
+          <md-card-title>NURSE</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+        <img md-card-image src="../assets/nurse_triangle.png">
+        <md-card-content>
+          <p>
+            Provides a treatment to a patient.
+          </p>
+        </md-card-content>
+
+        <md-card-actions>
+          <button md-button md-raised-button (click)="setRole('NURSE');">SELECT</button>
+        </md-card-actions>
+      </md-card>
+    </td>
+
+
+   <td>
+     <!--RESERVED NURSE CARD-->
+     <md-card class="role-card">
+       <md-card-header>
+         <!--<div md-card-avatar class="login-header-image"></div>-->
+         <md-card-title>RESERVED NURSE</md-card-title>
+         <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+       </md-card-header>
+       <img md-card-image src="../assets/nurse_triangle.png">
+       <md-card-content>
+         <p>
+           Provides a treatment to a patient.
+           Called by a leader as additional resource
+           to handle a catastrophic situation.
+
+         </p>
+       </md-card-content>
+
+       <md-card-actions>
+         <button md-button md-raised-button (click)="setRole('RESERVED_NURSE');">SELECT</button>
+       </md-card-actions>
+     </md-card>
+   </td>
+
+
+  </tr>
+</table>

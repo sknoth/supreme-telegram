@@ -8,6 +8,7 @@ import { ChatComponent } from './chat/chat.component';
 import {ScenarioComponent} from './admin/scenario.component';
 import {PatientComponent} from "./admin/patient.component";
 import {PatientDetailComponent} from "./admin/patient-detail.component";
+import {RolesComponent} from "./login/roles.component";
 
 const routes: Routes = [
   {
@@ -15,7 +16,7 @@ const routes: Routes = [
     children: []
   },
   {
-    path: 'gamemap',
+    path: 'gamemap/:userId/:scenarioId',
     component: GamemapComponent
   },
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path:'patient-detail',
     component:PatientDetailComponent
+  },
+  {
+    path:'roles/:name/:surname/:scenario',
+    component:RolesComponent
   }
 ];
 

@@ -1,5 +1,7 @@
 var User = require('../app/models/user');
-var scenarioCtrl = require('./controllers/scenarioCtrl');
+var scenarioCtrl = require('./controllers/scenarioCtrl.js');
+var userCtrl = require('./controllers/userCtrl.js');
+var gameCtrl = require('./controllers/gameCtrl.js');
 
 
 module.exports = function(app) {
@@ -57,24 +59,28 @@ module.exports = function(app) {
      *
      * @param  {type} '/users'
      */
-    app.post('/users', function(req, res) {
+    app.post('/user', function(req, res) {
 
-      console.log('create a user', req.body);
+        console.log('create a user', req.body);
+        userCtrl.createUser(req,function (user) {
+            res.send(user);
+        });
+
       // create the user
-      var newUser = new User();
-
-      newUser.name = req.body.name || '';
-      newUser.surname = req.body.surname || '';
-      newUser.role = req.body.role || '';
-      newUser.team = req.body.team || '';
-
-      newUser.save(function(err) {
-
-          if (err)
-              res.json({ message: 'error!' + err });
-
-        return res.send({ 'user': newUser, 'new': true });
-      });
+      // var newUser = new User();
+      //
+      // newUser.name = req.body.name || '';
+      // newUser.surname = req.body.surname || '';
+      // newUser.role = req.body.role || '';
+      // newUser.team = req.body.team || '';
+      //
+      // newUser.save(function(err) {
+      //
+      //     if (err)
+      //         res.json({ message: 'error!' + err });
+      //
+      //   return res.send({ 'user': newUser, 'new': true });
+      // });
 
       // // look for user in db
       // User.findOne({ '_id' :  req.body.id }, function(err, user) {

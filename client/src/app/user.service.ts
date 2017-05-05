@@ -9,25 +9,37 @@ import 'rxjs/add/operator/map';
 export class UserService {
 
   private userUrl = 'http://localhost:8080/users';
+  private serverUrl = 'http://localhost:3000'
+
 
   constructor(
     private _http: Http
   ) { }
 
+
+
   addUser(user) {
-    console.log('addUser', user);
+    //console.log('addUser', user);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this._http.post(this.userUrl, user, options)
-                    .map(this.extractData)
+    return this._http.post(this.serverUrl + "/user", user, options)
+                    .map(res => { return  res.json()})
                     .catch(this.handleError);
+
+
+  }
+
+  getUserById(userId){
+    return this._http.get(this.serverUrl + '/users/' + userId)
+      .map(data => { return data.json(); })
+      .catch(this.handleError);
   }
 
   private extractData(res: Response) {
     let body = res.json();
-    
+
     console.log('extractData', body);
     return body.data || { };
   }

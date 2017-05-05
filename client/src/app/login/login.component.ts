@@ -12,6 +12,9 @@ import {
 } from '@angular/forms';
 
 import { UserService } from '../user.service';
+import {AdminService} from '../admin.service';
+import {IScenario, IUser} from "../admin.interfaces";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -23,34 +26,36 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  scenarios:IScenario[];
+
+
+
   constructor(
     @Inject(FormBuilder) _formBuilder : FormBuilder,
-    private _userService: UserService
+    private _adminService:AdminService, private router: Router
   ) {
+
+
 
     this.loginForm = _formBuilder.group( {
         name : ['', Validators.required],
-        surname: '',
-        role: '',
-        newTeam: '',
-        team: '',
+        surname: ['', Validators.required],
+        scenario: ['', Validators.required],
     } );
+
+    _adminService.getScenarios().subscribe((v)=>{
+        this.scenarios = v;
+        //console.log(this.scenarios);
+    })
+
   }
 
   ngOnInit() { }
 
   onSubmit() {
 
-    let user = {
-      name : this.loginForm.controls.name.value,
-      surname: this.loginForm.controls.surname.value,
-      role: this.loginForm.controls.role.value,
-      team: this.loginForm.controls.team.value
-    };
+    this.router.navigate(['/roles',this.loginForm.controls.name.value,this.loginForm.controls.surname.value,this.loginForm.controls.scenario.value]);
 
-    this._userService.addUser(user).subscribe(
-      (data) => console.log(data)
-    );
   }
 
 }

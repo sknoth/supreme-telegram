@@ -99,7 +99,7 @@ module.exports.getAllScenarios = function (callback) {
     console.log("Get all scenarios");
   Scenario.find({},function (error,scenarios) {
       if(!error){
-          console.log(scenarios);
+          console.log("Total N:" + scenarios.length);
           callback(scenarios);
       }
       else{

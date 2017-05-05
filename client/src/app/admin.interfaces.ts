@@ -10,7 +10,7 @@ export interface PaginableScenarios {
   scenarios: IScenario[];
   pagination: Pagination;
 }
-
+/*IScenario*/
 export interface IScenario {
   _id?: string;
   name: string;
@@ -30,6 +30,26 @@ export interface Pagination {
   itemsPerPage: number;
   totalCount: number;
 }
+
+
+/*IUser*/
+
+export interface IUser{
+  name:string,
+  surname:string,
+  scenarioId?:string,
+  role:string,
+  team?:ITeam,
+  points?:number,
+  actions?:[Object],
+  patients?:[IPatient]
+}
+
+export interface ITeam{
+  name:string,
+  doctor:string
+}
+
 
 /*IPatient*/
 export type PatientType = "RED"|"ORANGE"|"YELLOW"|"GREEN"|"BLACK";
@@ -90,3 +110,16 @@ export interface IExposure{
   selectedTreatments:[string]
 }
 
+/*IGame*/
+
+export interface IGame{
+  scenario: string, //scenarioId
+
+  /**Fields that will be updated later in the game**/
+  leader:string,//leader that has been log in to the game and played the game: leader id
+  teams: [string], //teams that has been login to the game and played the game: user ids
+  totalActions: number,// total number of actions made by all teams and leader together
+  timeSpend:string,//time when spent to finish the game in string format mm:ss (minutes:seconds)
+  result:string,//the overall result of the game: result id
+
+}

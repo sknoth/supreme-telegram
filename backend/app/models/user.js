@@ -7,7 +7,7 @@ var userSchema = mongoose.Schema({
     name: String,
     surname: String,
     role: String, //[LEADER,NURSE,RESERVE_NURSE] - should be enum
-    team: {type:String,default:null}, //leader does not have a team,default value is null, can not be empty
+    team: {type:{name:String,doctor:String},default:null}, //leader does not have a team,default value is null, can not be empty
     points: {type:Number,default:0},
 
     /**Fields that will be always updated in the game**/
