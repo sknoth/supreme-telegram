@@ -1,10 +1,55 @@
-<p>
-  gamemap works!
-</p>
+<md-toolbar color="primary">
+  <md-toolbar-row>
+    <span>{{title}}</span>
+    <span class="example-spacer"></span>
+    <span>Time {{this.timer.minutes}}:{{this.timer.seconds}}</span>
+  </md-toolbar-row>
 
-<div *ngIf="user">
-  {{user.name}}
-  {{user.role}}
-</div>
+</md-toolbar>
+
+<table>
+  <tr>
+    <td>
+      <div *ngIf="user">
+        {{user.name}}
+        {{user.role}}
+      </div>
+
+      <div *ngFor="let team of game.teams">
+        {{team.team.name}}
+      </div>
+
+
+    </td>
+    <td>
+      <!--<img class="hospital_map" src="../assets/hospital_map.png">-->
+      <svg #hospital_map width="600" height="450" xmlns="http://www.w3.org/2000/svg"
+           xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g>
+          <title>Hospital Map</title>
+          <image xlink:href="../assets/hospital_map.png"
+                 id="map_svg" height="450" width="600" (click)="mapClick($event)" />
+        </g>
+        <!--show leader figure-->
+        <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y" fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
+
+        <!--show teams figures-->
+        <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
+
+        <g *ngFor="let team of game.teams">
+
+           <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
+        </g>
+      </svg>
+
+    </td>
+
+  </tr>
+
+</table>
+
+
+
+
 
 

@@ -8,7 +8,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 //controllers
 var ResultCtrl = require('./resultCtrl.js');
 
-module.exports.createGame = function (leaderId,teams,scenarioId,callback) {
+module.exports.createGame = function (scenarioId,user,callback) {
 
     //check if the game with this scenarioId 
     
@@ -16,13 +16,13 @@ module.exports.createGame = function (leaderId,teams,scenarioId,callback) {
     
     var game = new Game();
     game.scenario = scenarioId;
-    game.leader = leaderId;
     game.teams = [];
-     for(var i=0;i<teams.length;i++){
-         game.teams.push(teams[i]);
-     }
-
-    
+    if(user.role==="LEADER"){
+        game.leader = user.leader;
+    }
+    else{
+        game.teams.push(user._id);
+    }
 
     //create object Result
     ResultCtrl.createResult(function (newEmptyResult) {
@@ -31,7 +31,7 @@ module.exports.createGame = function (leaderId,teams,scenarioId,callback) {
 
             game.save(function (error,result) {
                 if(!error){
-                    //console.log(result);
+                    console.log(result);
 
                     Game.findOne({_id:new ObjectId(result._id).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
                         if(!err){
@@ -51,8 +51,63 @@ module.exports.createGame = function (leaderId,teams,scenarioId,callback) {
 };
 
 
-module.exports.gameLogIn = function () {
-    
+module.exports.isGameExists = function (scenarioId,callback) {
+    Game.find({scenario:new ObjectId(scenarioId.toString()),isPlayed:false},function (err,games) {
+        if(!err){
+            callback(games);
+        }
+        else{
+            console.log(err);
+            callback(null);
+        }
+    })
 }
+
+module.exports.joinGame = function (gameId,user,callback) {
+
+    Game.findOne({_id:new ObjectId(gameId.toString())},function (err,game) {
+        if(!err){
+
+            if(user.role==="LEADER"){
+                game.leader = user._id;
+            }
+            else{
+                game.teams.push(user._id);
+            }
+
+            if(game.leader !=null && game.teams.length>0){
+                game.isStarted = true;
+            }
+            game.save(function (err,updatedGame) {
+                //get game with populated values for leader and teams
+                getGameById(updatedGame._id,function (populatedGame) {
+                    callback(populatedGame);
+                })
+
+            })
+
+        }
+        else{
+            console.log(err);
+            callback(null);
+        }
+    })
+
+}
+
+
+function getGameById(gameId,callback) {
+    Game.findOne({_id:new ObjectId(gameId).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
+        if(!err){
+            console.log(result.toString());
+            callback(result);
+        }
+        else{
+            console.log(err);
+        }
+    })
+}
+
+
 
 

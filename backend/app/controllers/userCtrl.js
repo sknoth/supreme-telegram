@@ -14,6 +14,7 @@ module.exports.createUser = function (req,callback) {
     newUser.surname = req.body.surname || '';
     newUser.role = req.body.role;
     newUser.team = req.body.team ||'';
+    newUser.location = req.body.location || {x:0,y:0};
 
     newUser.save(function(err,user) {
 

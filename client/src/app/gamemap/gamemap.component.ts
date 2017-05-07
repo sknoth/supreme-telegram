@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ElementRef, AfterViewInit, Renderer2, ViewChild} from '@angular/core';
 
 import { UserService } from '../user.service';
 import {ChatService} from '../chat.service';
@@ -11,21 +11,73 @@ import {IGame, IUser} from "../admin.interfaces";
   templateUrl: './gamemap.component.html',
   styleUrls: ['./gamemap.component.scss']
 })
-export class GamemapComponent implements OnInit {
+export class GamemapComponent implements OnInit,AfterViewInit {
 
-  user:IUser;
+  user:IUser; //current user
   scenarioId:string;
   game:IGame;
 
-  constructor(private _userService: UserService, private _chatService:ChatService,private router: Router,private route: ActivatedRoute,public dialog: MdDialog) { }
+  timer:{minutes:string,seconds:string};
+
+  title = "Waiting for other users to be log in......"
+
+  //UI
+  @ViewChild('hospital_map') mapSvg: ElementRef;
+  leaderImg={x:'0',y:'0'};
+
+
+  constructor(private _userService: UserService, private renderer: Renderer2,private _chatService:ChatService,private router: Router,private route: ActivatedRoute,public dialog: MdDialog) {
+    this.game = {
+      teams:[],
+      totalActions:0,
+      timeSpend:'00:00'
+    };
+
+    this.timer= {minutes:"00",seconds:"00"};
+
+  }
 
   ngOnInit() {
 
+
+
+    this._chatService.getMessages().subscribe((message)=>{
+
+
+      if(message['topic'] === "join-game"){
+
+        console.log("Join Game");
+        this.game = message['data'];
+
+
+        if(this.game.isStarted){
+
+          this.title= "Game was already started...";
+        }
+
+      }
+
+      else if(message['topic'] ==="game-start"){
+        this.title="Game Started!";
+
+      }
+      else if(message['topic']==="timer"){
+
+        this.timer = message['data'];
+
+
+      }
+      else if(message['topic']==="game-over"){
+
+      }
+
+    });
+
     //reading route parameters
-    this.route.params.subscribe(params=>{
+     this.route.params.subscribe(params=>{
       this._userService.getUserById(params['userId']).subscribe((user)=>{
         this.user = <IUser>user;
-        console.log(this.user);
+
       });
       this.scenarioId = params['scenarioId'];
 
@@ -37,26 +89,29 @@ export class GamemapComponent implements OnInit {
     // make the gamemap view for nurses: visualize the map, users on the map, header is same as in leader gamemapview
 
 
-    this._chatService.connect();
-
-    this._chatService.getMessages().subscribe((message)=>{
-       console.log("message");
-
-       if(message['topic'] === "game-start"){
-         // TODO: remove the notification waiting for others to be log in
-         // TODO: show notificaiton game started!
-         console.log("GAME START");
-         this.game = message['data'];
-         console.log(this.game);
-         //TODO:Start timer
-         //show for leader availbale teams take this data from this.game object
 
 
-       }
 
-    });
+
   }
 
+
+  ngAfterViewInit() {
+
+
+
+  }
+
+
+  /*GUI interactions*/
+  mapClick(event){
+    console.log(event);
+    console.log(this);
+  }
+
+  updateMap(){
+
+  }
 
 
 

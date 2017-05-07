@@ -9,7 +9,7 @@ export class ChatService {
   private socket;
 
   sendMessage(topic, message){
-    console.log("send message")
+    //console.log("send message")
     this.socket.emit(topic, message);
   }
 
@@ -31,6 +31,10 @@ export class ChatService {
   connect(){
 
     this.socket = io(this.serverUrl);
+  }
+
+  disconnect(){
+    this.socket.disconnect();
   }
 }
 

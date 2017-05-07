@@ -10,12 +10,13 @@ var gameSchema = mongoose.Schema({
     scenario: {type: ObjectId, ref: 'IScenario'},
 
     /**Fields that will be updated later in the game**/
-    leader:{type:ObjectId,ref:'User'},//leader that has been log in to the game and played the game
+    leader:{type:ObjectId,ref:'User',default:null},//leader that has been log in to the game and played the game
     teams: [{type:ObjectId,ref:'User'}], //teams that has been login to the game and played the game
     totalActions: {type:Number,default:0},// total number of actions made by all teams and leader together
     timeSpend:{type:String,default:'00:00'},//time when spent to finish the game in string format mm:ss (minutes:seconds)
     result:{type:ObjectId,ref:'Result'},//the overall result of the game
-
+    isPlayed:{type:Boolean,default:false},
+    isStarted:{type:Boolean,default:false}
 });
 
 // create the model for users and expose it to our app

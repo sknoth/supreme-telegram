@@ -9,6 +9,7 @@ var userSchema = mongoose.Schema({
     role: String, //[LEADER,NURSE,RESERVE_NURSE] - should be enum
     team: {type:{name:String,doctor:String},default:null}, //leader does not have a team,default value is null, can not be empty
     points: {type:Number,default:0},
+    location:{x:Number,y:Number},
 
     /**Fields that will be always updated in the game**/
     actions:[], //Object, it is difficult to define the general schema for action, since different roles can have different fields in actions

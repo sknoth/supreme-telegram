@@ -69,64 +69,93 @@ io.on('connection', function(socket) {
         });
 
 
-
-        //check if it is a leader, disable the leader role
         if(data.user.role === "LEADER"){
             console.log("leader is log in");
             onlineUsers.push({user:data.user,scenarioId:data.scenarioId,team:null});
             io.emit('message',{topic:'disable-leader',data: "Leader is log in already"});
 
+
         }
         else{
             var teamIndex= nurses.length + 1;
-            var team = {name:"Team" + teamIndex,doctor:data.doctor};
+            var deltaX = teamIndex*30;
+            var team = {name:"Team" + teamIndex,doctor:data.doctor,x:190+deltaX,y:320};
             onlineUsers.push({user:data.user,scenarioId:data.scenarioId,team:team});
             //update the user with a team
 
             userCtrl.setTeam(data.user._id,team,function (result) {
-              if(result!=null){
-                  console.log("success");
-              }
+                if(result!=null){
+                    console.log("success");
+
+                }
 
             });
 
         }
 
 
-        //get again all log in users to the game
-
-        //get all who log in in the same game scenario
-        var allusers = onlineUsers.filter(function (item) {
-            return (item.scenarioId === data.scenarioId);
-        });
-
-        //check if we have a leader and 2 nurses
-        var leader = allusers.filter(function (item) {
-           return (item.user.role === "LEADER");
-        });
-
-        var nurses = allusers.filter(function (item) {
-            return (item.team != null);
-        });
-
-        console.log(onlineUsers);
-
-        if(leader.length>0 && nurses.length>=2){
-           //GAME START
-           console.log("GAME START!");
-           var teams = nurses.map(function (nurse) {
-               return nurse.user._id;
-           })
-           //create the game and send game id to all users
-           gameCtrl.createGame(leader[0]._id,teams,allusers[0].scenarioId,function (game) {
-               if(game!=null){
-                   io.emit('message',{topic:'game-start',data:game});
-               }
-           })
-
-        }
 
 
+        //check if the game is already exists
+        gameCtrl.isGameExists(data.scenarioId,function (games) {
+            if(games != null){
+                if(games.length>0){
+                     //join the game
+                    console.log("game exists");
+                    gameCtrl.joinGame(games[0]._id,data.user,function (updatedGame) {
+                        console.log("send join-game message");
+                        io.emit('message',{topic:'join-game',data:updatedGame});
+
+                        if(updatedGame.leader!=null && updatedGame.teams.length==2){
+                            console.log("send game start!");
+                            io.emit('message',{topic:'game-start',data:updatedGame});
+                            //start timer
+                            //should be moved to another place
+                            var countdown = updatedGame.scenario.duration*60;
+
+                            var minutes=Math.floor(countdown / 60);
+                            var seconds=countdown % 60;
+
+                            setInterval(function() {
+
+
+
+
+                                if (seconds == 0) {
+                                    minutes--;
+                                    seconds = 59;
+                                }
+                                if (seconds > 0) {
+                                    seconds --;
+                                }
+
+                                if(minutes == 0){
+                                    io.emit('message',{topic:'game-over',data:"GAME OVER"});
+                                }
+
+
+                                io.emit('message',{topic:'timer',data:{minutes:minutes,seconds:seconds}});
+
+                            }, 1000);
+
+
+
+
+
+                        }
+
+                    });
+                }
+                else{
+                    //create the game
+                    console.log("create the game");
+                    gameCtrl.createGame(data.scenarioId,data.user,function (newGame) {
+                        console.log("send join-game message");
+                        io.emit('message',{topic:'join-game',data:newGame});
+                    })
+                }
+            }
+        })
 
 
     });

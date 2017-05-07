@@ -39,6 +39,7 @@ export class RolesComponent implements OnInit {
   scenarioId:string;
   role:string;
   doctor:string;
+  location:{x:Number,y:Number};
 
   leader_disabled = false;
 
@@ -58,6 +59,7 @@ export class RolesComponent implements OnInit {
       this.name = params['name'];
       this.surname = params['surname'];
       this.scenarioId = params['scenario'];
+      this.location = {x:0,y:0};
 
     })
 
@@ -65,13 +67,14 @@ export class RolesComponent implements OnInit {
     this._chatService.connect();
 
     this._chatService.getMessages().subscribe(message=>{
-       console.log(message);
+       //console.log(message);
 
       if(message['topic'] === "disable-leader"){
 
         this.leader_disabled = true; //TODO:disabel leader button, this code does not work, do not know why?
 
       }
+
 
     });
   }
@@ -89,6 +92,7 @@ export class RolesComponent implements OnInit {
        this.openDialog();
      }
      else{
+       this.location= {x:280,y:276};
        this.logIn();
      }
 
@@ -106,18 +110,20 @@ export class RolesComponent implements OnInit {
 
   logIn(){
 
+
+
     let user : IUser = {
       name:this.name,
       surname:this.surname,
       scenarioId:this.scenarioId,
-      role:this.role
-
+      role:this.role,
+      location:this.location
     }
 
     //create user
     this._userService.addUser(user).subscribe((v)=>{
 
-      console.log(v);
+
       //notify all
       this._chatService.sendMessage("login",JSON.stringify({user:v,scenarioId:this.scenarioId,doctor:this.doctor}));
       //show gamemap view

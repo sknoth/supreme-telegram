@@ -42,12 +42,15 @@ export interface IUser{
   team?:ITeam,
   points?:number,
   actions?:[Object],
-  patients?:[IPatient]
+  patients?:[IPatient],
+  location?:Object
 }
 
 export interface ITeam{
   name:string,
-  doctor:string
+  doctor:string,
+  x:number,
+  y:number
 }
 
 
@@ -113,13 +116,15 @@ export interface IExposure{
 /*IGame*/
 
 export interface IGame{
-  scenario: string, //scenarioId
+  scenario?: string, //scenarioId
 
   /**Fields that will be updated later in the game**/
-  leader:string,//leader that has been log in to the game and played the game: leader id
-  teams: [string], //teams that has been login to the game and played the game: user ids
+  leader?:IUser,//leader that has been log in to the game and played the game: leader id
+  teams?: IUser[], //teams that has been login to the game and played the game: user ids
   totalActions: number,// total number of actions made by all teams and leader together
   timeSpend:string,//time when spent to finish the game in string format mm:ss (minutes:seconds)
-  result:string,//the overall result of the game: result id
+  result?:string,//the overall result of the game: result id
+  isStarted?:boolean,
+  isPlayed?:boolean
 
 }
