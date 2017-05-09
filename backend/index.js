@@ -148,6 +148,9 @@ io.on('connection', function(socket) {
                         console.log("send join-game message");
                         io.emit('message',{topic:'join-game',data:newGame});
 
+                        //for testing purpose only
+                        //io.emit('message',{topic:'game-start',data:newGame});
+
                     })
                 }
             }
@@ -191,6 +194,8 @@ io.on('connection', function(socket) {
         gameCtrl.leftGame(data.gameId,data.user,function (updatedGame) {
             console.log(updatedGame);
             io.emit('message',{topic:'update-game',data:updatedGame});
+
+
         });
     });
 

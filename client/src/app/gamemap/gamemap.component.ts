@@ -21,14 +21,16 @@ export class GamemapComponent implements OnInit,AfterViewInit {
   timer:{minutes:string,seconds:string};
 
   title = "Waiting for other users to be log in......";
+  //in milliseonds
+  timeToshowASHET = 30000;//in 30 seconds
+
+  //UI
+  hideDebrifButton = true;
+  hideCallButton = true;
 
 
   //patients that are located in the hospital before the accident happened
   patientsAtED:IPatient[];
-
-  //UI
-  @ViewChild('hospital_map') mapSvg: ElementRef;
-
 
 
   constructor(private _userService: UserService, private renderer: Renderer2,private _chatService:ChatService,private router: Router,private route: ActivatedRoute,public dialog: MdDialog) {
@@ -79,8 +81,21 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
 
         if(this.user.role === "LEADER"){
+          console.log(this.game.scenario);
           //send notification to the leader about accident
-          this.openNotificationDialog("Incoming Call from Ambulance",this.game.scenario.description + "<p>" +this.game.scenario.metana_report +"</p>","../assets/ambulance_call_icon.png","");
+          this.openNotificationDialog("Incoming Call from Ambulance",this.game.scenario.description + "<p>" +this.game.scenario.metana_report +"</p>","methane","../assets/ambulance_call_icon.png","");
+
+
+          //after 30 seconds show ASHET report
+          let dialogContent = this.game.scenario.ashet_report;
+          let that = this;
+
+          //show ashet report in 30seconds ->should be changed
+          setTimeout(function () {
+            that.openNotificationDialog("Incoming Call with ASHET report",dialogContent,"ashet","../assets/ambulance_call_icon.png","");
+
+          },this.timeToshowASHET);
+
         }
         else{
           //send notification to the nurses "wait for the leader to be contacted"
@@ -141,22 +156,6 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     console.log(this);
   }
 
-  openNotificationDialog(title,content,icon?,styleCSS?){
-
-    let dialogRef = this.dialog.open(NotificationDialogComponent);
-    dialogRef.componentInstance.title = title;
-    dialogRef.componentInstance.content = content;
-    dialogRef.componentInstance.icon = icon;
-    dialogRef.componentInstance.styleCSS = styleCSS;
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-
-    });
-
-  }
-
-
   patientEdClick(event,pIdentificator){
     console.log("patient click");
     console.log(pIdentificator);
@@ -165,6 +164,79 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     this.openPatientIdDialog(selectedPatient);
 
   }
+
+  /***USER ACTIONS****/
+
+  debriefAction(){
+    this.user.actions.push({name:"Debriefing",time:new Date()});
+    this.title ="Inform all personal about the accident.";
+    this.hideDebrifButton = true;
+  }
+
+  contactUnit(unit){
+    this.user.actions.push({name:"Kontakta " + unit,time:new Date()});
+    //disable the button
+
+    //if LAS called
+    if(unit === "LAS"){
+      //show input dialog;
+      this.openInputDialog("Request Number of Beds","Number of Beds","las");
+    }
+  }
+
+  /**DIALOGS**/
+
+  openNotificationDialog(title,content,result?,icon?,styleCSS?){
+
+    let dialogRef = this.dialog.open(NotificationDialogComponent);
+    dialogRef.componentInstance.title = title;
+    dialogRef.componentInstance.content = content;
+    dialogRef.componentInstance.icon = icon;
+    dialogRef.componentInstance.styleCSS = styleCSS;
+    dialogRef.componentInstance.result = result;
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if(result === "methane"){
+        //show button Debriefing
+
+        this.title = "Use button Debriefing to start to notify all personal about the accident";
+
+        this.hideDebrifButton = false;
+      }
+      else if (result ==="ashet"){
+        this.title = "Inform the rest.....";
+        this.hideDebrifButton = true;
+
+        //show all 9 buttons
+        this.hideCallButton = false;
+      }
+    });
+
+  };
+
+  openInputDialog(title,placeholder,result?,styleCss?){
+    let dialogRef = this.dialog.open(InputDialogComponent);
+    dialogRef.componentInstance.title = title;
+    dialogRef.componentInstance.placeholder = placeholder;
+    dialogRef.componentInstance.styleCSS = styleCss;
+    dialogRef.componentInstance.result = result;
+
+    dialogRef.afterClosed().subscribe(result => {
+      //TODO:get input value from dialog!
+      console.log(result);
+
+      if(result ==="las"){
+        console.log("Las has been contacted!");
+        this.user.actions.push({name:"Requested X number of Beds",time:new Date()});
+
+      }
+    });
+
+
+  }
+
+
 
   openPatientIdDialog(patient) {
 
@@ -219,6 +291,9 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
     });
   }
+
+  /*****Patients at ED*******/
+
 
   initPatientAtED(){
     //hard code patients at ED before the accident
@@ -415,7 +490,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
 }
 
-
+/*******DIALOG COMPONENTS************/
 
 @Component({
   selector: 'app-patientEd-dialog',
@@ -466,8 +541,26 @@ export class PatientInfoDialogComponent {
 export class NotificationDialogComponent {
   title:string;
   icon:string;
+  result:string; //the return value from the button "OK"
   content:string; //html content
   styleCSS:string; //class name
 
+
   constructor(public dialogRef: MdDialogRef<NotificationDialogComponent>) {}
+}
+
+@Component({
+  selector: 'app-input-dialog',
+  templateUrl: './input-dialog.component.html'
+
+})
+export class InputDialogComponent {
+  title:string;
+  placeholder:string;
+  value=""; //the input that user provided
+  result:string;//the return value from button Send
+  styleCSS:string; //class name
+
+
+  constructor(public dialogRef: MdDialogRef<InputDialogComponent>) {}
 }
