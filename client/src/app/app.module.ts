@@ -22,9 +22,10 @@ import { AdminComponent } from './admin/admin.component';
 import {ScenarioComponent} from './admin/scenario.component';
 import {PatientComponent} from './admin/patient.component';
 import {PatientDetailComponent} from './admin/patient-detail.component';
-import { ChatComponent } from './chat/chat.component';
+import {ChatComponent } from './chat/chat.component';
 import {RolesComponent} from './login/roles.component';
 import {DoctorDialogComponent} from './login/roles.component';
+import {NurseComponent} from "./nurse/nurse.component";
 
 
 import { UserService } from './user.service';
@@ -34,6 +35,7 @@ import {AdminService} from "./admin.service";
 //Material components used in this application
 import { MaterialModule } from '@angular/material';
 import {ChatService} from "./chat.service";
+
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import {ChatService} from "./chat.service";
     MovePatientDialogComponent,
     PatientInfoDialogComponent,
     NotificationDialogComponent,
-    InputDialogComponent
+    InputDialogComponent,
+    NurseComponent
 
 
   ],

@@ -24,7 +24,7 @@ var patientSchema = mongoose.Schema({
     /**Updated fields**/
     provided_treatments:[],// list of treatments has been chosen by a nurse/team
     teams:[{type:String}], // teams that were assigned to this patient, we assume by default one team, but can be that two teams treat one patient
-    location:String   //was send by nurse to Corridor,AVA,OP,IVA, X-REY, etc.
+    locations:[{type:String}]   //was send by nurse to Corridor,AVA,OP,IVA, X-REY, etc.
 
 });
 

@@ -65,28 +65,28 @@ export interface IPatient{
   gender:string,
   triage:string,//[RED,ORANGE,YELLOW,GREEN,BLACK]
   description?: string, //general description
-  airway:IAirway,//{type:[OK, THREAD,BLOCKED],description:String}
-  breathing:IBreathing, //{RP:[Fast >30,Normal >10 >30,etc.],SPO2:String,CIANOSIS:[etc.], description:String}
-  circulation:ICirculation,//similar to breathing see table from the scenario + casuality card
-  disability:IDisability,//similar to breathing see table from the scenario + casuality card
-  exposure:IExposure,//similar to breathing see table from the scenario + casuality card
+  airway?:IAirway,//{type:[OK, THREAD,BLOCKED],description:String}
+  breathing?:IBreathing, //{RP:[Fast >30,Normal >10 >30,etc.],SPO2:String,CIANOSIS:[etc.], description:String}
+  circulation?:ICirculation,//similar to breathing see table from the scenario + casuality card
+  disability?:IDisability,//similar to breathing see table from the scenario + casuality card
+  exposure?:IExposure,//similar to breathing see table from the scenario + casuality card
   scenarioId:string,
   /**Updated fields**/
   provided_treatments?:[string],// list of treatments has been chosen by a nurse/team
-  teams?:[{type:string}], // teams that were assigned to this patient, we assume by default one team, but can be that two teams treat one patient
-  location?:string,   //was send by nurse to Corridor,AVA,OP,IVA, X-REY, etc.
+  teams?:[string], // teams that were assigned to this patient, we assume by default one team, but can be that two teams treat one patient
+  locations?:[string],   //was send by nurse to Corridor,AVA,OP,IVA, X-REY, etc.
   coordinates?:{x:number,y:number},
   imgUrl?:string
 }
 
 export interface IAirway{
-   type:string,
+   type?:string,
    description?:string,
    selectedTreatments?:[string]
 
 }
 export interface IBreathing{
-  af: number,
+  af?: number,
   spo2: number,
   bfrequency?: number,
   description?: string,
@@ -95,8 +95,8 @@ export interface IBreathing{
 }
 
 export interface ICirculation{
-  bt: string,
-  pulse: number,
+  bt?: string,
+  pulse?: number,
   skinType?: string,
   mucusColor?: string,
   capillary?: string,
@@ -105,7 +105,7 @@ export interface ICirculation{
 
 }
 export interface IDisability{
-  rls: string,
+  rls?: string,
   gcs: number,
   glucose?: number,
   description?:string,
@@ -113,9 +113,9 @@ export interface IDisability{
 
 }
 export interface IExposure{
-  temperature: number,
-  description: string,
-  selectedTreatments:[string],
+  temperature?: number,
+  description?: string,
+  selectedTreatments?:[string],
 
 }
 

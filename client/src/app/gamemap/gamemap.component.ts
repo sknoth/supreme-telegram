@@ -329,7 +329,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       },
 
       /**Updated fields**/
-      location:"Room21",
+      locations:["Room21"],
       coordinates:{x:230,y:382},
       imgUrl:"../assets/YELLOW.png"
     };
@@ -367,7 +367,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
         description: "Smärta höger fossa, normala tarmljud och mjuk buk vid palpation. Är smärtlindrad. Väntar på provsvar"
       },
       /**Updated fields**/
-      location:"Room12",
+      locations:["Room12"],
       coordinates:{x:76,y:113},
       imgUrl:"../assets/GREEN.png"
     }
@@ -403,7 +403,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       },
 
       /**Updated fields**/
-      location:"Room19",
+      locations:["Room19"],
       coordinates:{x:299,y:382},
       imgUrl:"../assets/YELLOW.png"
     }
@@ -438,7 +438,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       },
 
       /**Updated fields**/
-      location:"Room15",
+      locations:["Room15"],
       coordinates:{x:253,y:210},
       imgUrl:"../assets/YELLOW.png"
     };
@@ -476,7 +476,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
       },
       /**Updated fields**/
-      location:"Room18",
+      locations:["Room18"],
       coordinates:{x:253,y:235},
       imgUrl:"../assets/ORANGE.png"
     };

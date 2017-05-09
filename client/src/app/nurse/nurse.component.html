@@ -1,1 +1,379 @@
+<md-toolbar color="primary">
+  <md-toolbar-row>
 
+    <button md-button (click)="back()">Back</button>
+
+    <span>Room {{room}}</span>
+
+    <span class="example-spacer"></span>
+
+    <span>Actions 0/5</span>
+
+  </md-toolbar-row>
+
+</md-toolbar>
+
+
+<table>
+  <tr>
+    <td>
+       <h3>Select Treatments:</h3>
+
+      <form [formGroup]="treatmentsForm" (ngSubmit)="onSubmit($event)">
+
+
+        <md-tab-group>
+          <md-tab label="Airway">
+
+            <div formGroupName="airway">
+              <div formArrayName="alltreatments">
+                <div *ngFor="let treatment of treatmentsForm.controls.airway.controls.alltreatments.controls; let i=index" >
+                  <div formGroupName="{{i}}">
+                    <md-checkbox  id="treatment_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                    <label attr.for="treatment_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </md-tab>
+          <md-tab label="Breathing">
+
+            <div formGroupName="breathing">
+              <div formArrayName="alltreatments">
+                <div *ngFor="let treatment of treatmentsForm.controls.breathing.controls.alltreatments.controls; let i=index" >
+                  <div formGroupName="{{i}}">
+                    <md-checkbox  id="breathing_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                    <label attr.for="breathing_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </md-tab>
+          <md-tab label="Circulation">
+            <div formGroupName="circulation">
+              <div formArrayName="alltreatments">
+                <div *ngFor="let treatment of treatmentsForm.controls.circulation.controls.alltreatments.controls; let i=index" >
+                  <div formGroupName="{{i}}">
+                    <md-checkbox  id="circulation_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                    <label attr.for="circulation_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </md-tab>
+          <md-tab label="Disability">
+            <div formGroupName="disability">
+              <div formArrayName="alltreatments">
+                <div *ngFor="let treatment of treatmentsForm.controls.disability.controls.alltreatments.controls; let i=index" >
+                  <div formGroupName="{{i}}">
+                    <md-checkbox  id="disability_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                    <label attr.for="disability_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </md-tab>
+          <md-tab label="Exposure">
+
+            <div formGroupName="exposure">
+              <div formArrayName="alltreatments">
+                <div *ngFor="let treatment of treatmentsForm.controls.exposure.controls.alltreatments.controls; let i=index" >
+                  <div formGroupName="{{i}}">
+                    <md-checkbox  id="exposure_{{treatment.controls.key.value}}" formControlName="checked"></md-checkbox>
+                    <label attr.for="exposure_{{treatment.controls.key.value}}"> {{treatment.controls.value.value}} </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </md-tab>
+        </md-tab-group>
+
+        <button md-raised-button type="submit" class="input-full-width">Treat a patient</button>
+
+      </form>
+
+
+      <button md-button md-raised-button class="input-full-width" (click)="movePatient()">Move Patient</button>
+
+
+    </td>
+
+    <td>
+          <!--patient view-->
+      <table>
+        <tr>
+          <td>
+            <img src="{{patient.imgUrl}}" width="60" height="60">
+          </td>
+
+          <td>
+            <h3>{{patient.name}},{{patient.age}} år </h3>
+            <span>Gender: {{patient.gender}}</span>
+            <p>{{patient.description}}</p>
+          </td>
+        </tr>
+      </table>
+
+
+      <table>
+        <!--A and B-->
+        <tr>
+          <td>
+            <md-card class="A-card">
+              <md-card-header>
+                <div md-card-avatar class="a-header-image"></div>
+                <md-card-title class="title">Airway</md-card-title>
+                <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+              </md-card-header>
+
+              <md-card-content>
+                <table>
+                  <tr>
+                    <td>
+                      Status:
+                    </td>
+                    <td>
+                      {{patient.airway.type}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.airway.description">
+                    <td>
+                      Desc:
+                    </td>
+                    <td>
+                      {{patient.airway.description}}
+                    </td>
+                  </tr>
+                </table>
+
+              </md-card-content>
+            </md-card>
+          </td>
+
+          <td>
+            <md-card class="B-card">
+              <md-card-header>
+                <div md-card-avatar class="b-header-image"></div>
+                <md-card-title class="title">Breathing</md-card-title>
+                <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+              </md-card-header>
+
+              <md-card-content>
+                <table>
+                  <tr>
+                    <td>
+                      AF:
+                    </td>
+                    <td>
+                      {{patient.breathing.af}}
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      SPO2:
+                    </td>
+                    <td>
+                      {{patient.breathing.spo2}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.breathing.bfrequency">
+                    <td>
+                      Breath Frequency:
+                    </td>
+                    <td>
+                      {{patient.breathing.bfrequency}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.breathing.description">
+                    <td>
+                      Desc:
+                    </td>
+                    <td>
+                      {{patient.breathing.description}}
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+
+          </td>
+        </tr>
+
+        <!--C and D-->
+        <tr>
+          <td>
+
+            <md-card class="C-card">
+              <md-card-header>
+                <div md-card-avatar class="c-header-image"></div>
+                <md-card-title class="title">Circulation</md-card-title>
+
+              </md-card-header>
+
+              <md-card-content>
+                <table>
+                  <tr>
+                    <td>
+                      BT:
+                    </td>
+                    <td>
+                      {{patient.circulation.bt}}
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      PULSE:
+                    </td>
+                    <td>
+                      {{patient.circulation.pulse}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.circulation.skinType">
+                    <td>
+                      SKIN:
+                    </td>
+                    <td>
+                      {{patient.circulation.skinType}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.circulation.mucusColor">
+                    <td>
+                      Mucus Color:
+                    </td>
+                    <td>
+                      {{patient.circulation.mucusColor}}
+                    </td>
+                  </tr>
+
+
+                  <tr *ngIf="patient.circulation.capillary">
+                    <td>
+                      Capillary:
+                    </td>
+                    <td>
+                      {{patient.circulation.capillary}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.circulation.description">
+                    <td>
+                      Desc:
+                    </td>
+                    <td>
+                      {{patient.circulation.description}}
+                    </td>
+                  </tr>
+
+                </table>
+              </md-card-content>
+            </md-card>
+
+
+          </td>
+
+          <td>
+            <md-card class="D-card">
+              <md-card-header>
+                <div md-card-avatar class="d-header-image"></div>
+                <md-card-title class="title">Disability</md-card-title>
+                <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+              </md-card-header>
+
+              <md-card-content>
+                <table>
+                  <tr>
+                    <td>
+                      RLS:
+                    </td>
+                    <td>
+                      {{patient.disability.rls}}
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td>
+                      GCS:
+                    </td>
+                    <td>
+                      {{patient.disability.gcs}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.disability.glucose">
+                    <td>
+                      Glucose:
+                    </td>
+                    <td>
+                      {{patient.disability.glucose}}
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="patient.disability.description">
+                    <td>
+                      Desc:
+                    </td>
+                    <td>
+                      {{patient.disability.description}}
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+          </td>
+
+        </tr>
+
+
+        <!--E-->
+        <tr>
+          <td colspan="2">
+
+            <md-card class="E-card" *ngIf="patient.exposure">
+              <md-card-header>
+                <div md-card-avatar class="e-header-image"></div>
+                <md-card-title class="title">Exposure</md-card-title>
+                <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+              </md-card-header>
+
+              <md-card-content>
+                <table>
+                  <tr *ngIf="patient.exposure.temperature">
+                    <td>
+                      Temperature:
+                    </td>
+                    <td>
+                      {{patient.exposure.temperature}}
+                    </td>
+
+                  </tr>
+
+                  <tr *ngIf="patient.exposure.description">
+                    <td>
+                      Desc:
+                    </td>
+                    <td>
+                      {{patient.exposure.description}}
+                    </td>
+                  </tr>
+                </table>
+              </md-card-content>
+            </md-card>
+
+          </td>
+        </tr>
+      </table>
+    </td>
+
+  </tr>
+</table>

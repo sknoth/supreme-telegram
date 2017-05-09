@@ -9,6 +9,7 @@ import {ScenarioComponent} from './admin/scenario.component';
 import {PatientComponent} from "./admin/patient.component";
 import {PatientDetailComponent} from "./admin/patient-detail.component";
 import {RolesComponent} from "./login/roles.component";
+import {NurseComponent} from "./nurse/nurse.component";
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path:'roles/:name/:surname/:scenario',
     component:RolesComponent
+  },
+  {
+    path:'nurse',
+    component:NurseComponent
   }
 ];
 
