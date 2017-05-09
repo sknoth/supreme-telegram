@@ -11,14 +11,18 @@ var ResultCtrl = require('./resultCtrl.js');
 module.exports.createGame = function (scenarioId,user,callback) {
 
     //check if the game with this scenarioId 
-    
+    //create the game
+    console.log("create the game");
 
-    
+
+
     var game = new Game();
     game.scenario = scenarioId;
     game.teams = [];
+    console.log("inside");
+    console.log(user.role);
     if(user.role==="LEADER"){
-        game.leader = user.leader;
+        game.leader = user._id;
     }
     else{
         game.teams.push(user._id);

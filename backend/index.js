@@ -85,17 +85,13 @@ io.on('connection', function(socket) {
 
             userCtrl.setTeam(data.user._id,team,function (result) {
                 if(result!=null){
-                    console.log("success");
-
+                    //console.log("success");
                 }
 
             });
 
         }
 
-
-
-        console.log(data.scenarioId);
         //check if the game is already exists
         gameCtrl.isGameExists(data.scenarioId,function (games) {
             if(games != null){
@@ -106,7 +102,7 @@ io.on('connection', function(socket) {
                         console.log("send join-game message");
                         io.emit('message',{topic:'join-game',data:updatedGame});
 
-                        if(updatedGame.leader!=null && updatedGame.teams.length==2){
+                        if(updatedGame.leader!=null && updatedGame.teams.length===2){
                             console.log("send game start!");
                             io.emit('message',{topic:'game-start',data:updatedGame});
                             //start timer
@@ -147,11 +143,11 @@ io.on('connection', function(socket) {
                     });
                 }
                 else{
-                    //create the game
-                    console.log("create the game");
+
                     gameCtrl.createGame(data.scenarioId,data.user,function (newGame) {
                         console.log("send join-game message");
                         io.emit('message',{topic:'join-game',data:newGame});
+
                     })
                 }
             }

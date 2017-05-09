@@ -105,6 +105,7 @@ export class PatientDetailComponent implements OnInit{
       { key: 'Immobilization', value: 'Immobilization' ,checked:false},
       { key: 'Pleuratappning', value: 'Pleuratappning',checked:false }
 
+
     ];
 
 

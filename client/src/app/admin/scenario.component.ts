@@ -24,6 +24,7 @@ export class ScenarioComponent implements OnInit{
     description: ["", Validators.required],
     duration: ["", Validators.required],
     metana_report:["", Validators.required],
+    ashet_report:["",Validators.required],
     nPatients:["", Validators.required],
     maxReservedNurses:["", Validators.required],
     nBusyRooms:["", Validators.required],

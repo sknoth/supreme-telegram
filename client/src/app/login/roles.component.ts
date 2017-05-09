@@ -29,6 +29,7 @@ import {MdDialog, MdDialogRef} from '@angular/material';
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class RolesComponent implements OnInit {
 
@@ -126,8 +127,14 @@ export class RolesComponent implements OnInit {
 
       //notify all
       this._chatService.sendMessage("login",JSON.stringify({user:v,scenarioId:this.scenarioId,doctor:this.doctor}));
+
+
+
+      this._userService.setUser(v);
+
+
       //show gamemap view
-      this.router.navigate(['/gamemap',v._id,this.scenarioId]);
+      this.router.navigate(['/gamemap',this.scenarioId]);
     });
 
 

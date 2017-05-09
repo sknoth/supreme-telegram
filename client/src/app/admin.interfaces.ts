@@ -17,6 +17,7 @@ export interface IScenario {
   description: string;
   duration: ScenarioDuration;
   metana_report:string,
+  ashet_report:string,
   nPatients:number,
   patients?:[IPatient],
   maxReservedNurses:number,

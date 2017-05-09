@@ -16,7 +16,7 @@ const routes: Routes = [
     children: []
   },
   {
-    path: 'gamemap/:userId/:scenarioId',
+    path: 'gamemap/:scenarioId',
     component: GamemapComponent
   },
   {

@@ -7,7 +7,7 @@ var ObjectId = mongoose.Schema.ObjectId;
 // define the schema for our game model
 var gameSchema = mongoose.Schema({
     /**Static fields***/
-    scenario: {type: ObjectId, ref: 'IScenario'},
+    scenario: {type: ObjectId, ref: 'Scenario'},
 
     /**Fields that will be updated later in the game**/
     leader:{type:ObjectId,ref:'User',default:null},//leader that has been log in to the game and played the game

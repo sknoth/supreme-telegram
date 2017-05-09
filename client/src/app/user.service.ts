@@ -5,18 +5,32 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { Subject }    from 'rxjs/Subject';
+
+import {IUser} from "./admin.interfaces";
+
 @Injectable()
 export class UserService {
 
   private userUrl = 'http://localhost:8080/users';
-  private serverUrl = 'http://localhost:3000'
-
+  private serverUrl = 'http://localhost:3000';
+  // Observable user
+  private user:IUser;
 
   constructor(
     private _http: Http
   ) { }
 
+  setUser(user:IUser){
 
+    this.user = user;
+
+  }
+
+  getUser(){
+    console.log(this.user);
+    return this.user;
+  }
 
   addUser(user) {
     //console.log('addUser', user);

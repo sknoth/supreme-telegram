@@ -10,6 +10,7 @@ import {IGame, IPatient, IUser} from "../admin.interfaces";
   selector: 'app-gamemap',
   templateUrl: './gamemap.component.html',
   styleUrls: ['./gamemap.component.scss']
+
 })
 export class GamemapComponent implements OnInit,AfterViewInit {
 
@@ -41,10 +42,20 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
     this.initPatientAtED();
 
+    this.user = _userService.getUser()
+
+
   }
 
   ngOnInit() {
 
+
+    //reading route parameters
+    this.route.params.subscribe(params=>{
+
+      this.scenarioId = params['scenarioId'];
+
+    });
 
 
     this._chatService.getMessages().subscribe((message)=>{
@@ -65,14 +76,15 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
       else if(message['topic'] ==="game-start"){
         this.title="Game Started!";
-         console.log(this.user);
+
 
         if(this.user.role === "LEADER"){
           //send notification to the leader about accident
-          this.openNotificationDialog("Incoming Call from Ambulance",this.game.scenario.description,"../assets/ambulance_call_icon.png","");
+          this.openNotificationDialog("Incoming Call from Ambulance",this.game.scenario.description + "<p>" +this.game.scenario.metana_report +"</p>","../assets/ambulance_call_icon.png","");
         }
         else{
           //send notification to the nurses "wait for the leader to be contacted"
+          this.title = "Wait to be contacted by the Leader....";
         }
 
       }
@@ -99,15 +111,6 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
     });
 
-    //reading route parameters
-     this.route.params.subscribe(params=>{
-      this._userService.getUserById(params['userId']).subscribe((user)=>{
-        this.user = <IUser>user;
-
-      });
-      this.scenarioId = params['scenarioId'];
-
-    });
 
 
     // make the gamemap view as in the paper prototype for leader

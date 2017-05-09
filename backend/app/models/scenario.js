@@ -11,6 +11,7 @@ var scenarioSchema = mongoose.Schema({
     name: String,
     description: String,
     metana_report:String,
+    ashet_report:String,
     duration: {type:Number,default:15}, //in minutes, if not specified by default is 15 minutes
     nPatients:{type:Number,default:8},
     patients:[{type:ObjectId,ref:'Patient'}],
@@ -21,4 +22,4 @@ var scenarioSchema = mongoose.Schema({
 });
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('IScenario', scenarioSchema);
+module.exports = mongoose.model('Scenario', scenarioSchema);

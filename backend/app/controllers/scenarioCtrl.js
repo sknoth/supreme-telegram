@@ -18,13 +18,14 @@ module.exports.createScenario = function (req,callback) {
     newScenario.nBusyRooms = req.body.nBusyRooms;
     newScenario.info_bakjour = req.body.info_bakjour;
     newScenario.metana_report = req.body.metana_report;
+    newScenario.ashet_report = req.body.ashet_report;
 
     newScenario.save(function (error,result) {
         if(!error){
            callback(result);
         }
         else{
-            console.log("Error:Create a new IScenario " + error);
+            console.log("Error:Create a new Scenario " + error);
             callback(null);
         }
     });
