@@ -1,0 +1,261 @@
+<h1 md-dialog-title>ABCDE of {{patient.identificator}}</h1>
+<table>
+  <!--A and B-->
+  <tr>
+    <td>
+      <md-card class="A-card">
+        <md-card-header>
+          <div md-card-avatar class="a-header-image"></div>
+          <md-card-title class="title">Airway</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+
+        <md-card-content>
+          <table>
+            <tr>
+             <td>
+               Status:
+             </td>
+              <td>
+                {{patient.airway.type}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.airway.description">
+              <td>
+                Desc:
+              </td>
+              <td>
+                {{patient.airway.description}}
+              </td>
+            </tr>
+          </table>
+
+        </md-card-content>
+      </md-card>
+    </td>
+
+    <td>
+      <md-card class="B-card">
+        <md-card-header>
+          <div md-card-avatar class="b-header-image"></div>
+          <md-card-title class="title">Breathing</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+
+        <md-card-content>
+           <table>
+             <tr>
+               <td>
+                 AF:
+               </td>
+               <td>
+                 {{patient.breathing.af}}
+               </td>
+
+             </tr>
+             <tr>
+               <td>
+                 SPO2:
+               </td>
+               <td>
+                 {{patient.breathing.spo2}}
+               </td>
+             </tr>
+
+             <tr *ngIf="patient.breathing.bfrequency">
+               <td>
+                 Breath Frequency:
+               </td>
+               <td>
+                 {{patient.breathing.bfrequency}}
+               </td>
+             </tr>
+
+             <tr *ngIf="patient.breathing.description">
+               <td>
+                 Desc:
+               </td>
+               <td>
+                 {{patient.breathing.description}}
+               </td>
+             </tr>
+           </table>
+        </md-card-content>
+      </md-card>
+
+    </td>
+  </tr>
+
+  <!--C and D-->
+  <tr>
+    <td>
+
+      <md-card class="C-card">
+        <md-card-header>
+          <div md-card-avatar class="c-header-image"></div>
+          <md-card-title class="title">Circulation</md-card-title>
+
+        </md-card-header>
+
+        <md-card-content>
+          <table>
+            <tr>
+              <td>
+                BT:
+              </td>
+              <td>
+                {{patient.circulation.bt}}
+              </td>
+
+            </tr>
+            <tr>
+              <td>
+                PULSE:
+              </td>
+              <td>
+                {{patient.circulation.pulse}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.circulation.skinType">
+              <td>
+                SKIN:
+              </td>
+              <td>
+                {{patient.circulation.skinType}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.circulation.mucusColor">
+              <td>
+                Mucus Color:
+              </td>
+              <td>
+                {{patient.circulation.mucusColor}}
+              </td>
+            </tr>
+
+
+            <tr *ngIf="patient.circulation.capillary">
+              <td>
+                Capillary:
+              </td>
+              <td>
+                {{patient.circulation.capillary}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.circulation.description">
+              <td>
+                Desc:
+              </td>
+              <td>
+                {{patient.circulation.description}}
+              </td>
+            </tr>
+
+          </table>
+        </md-card-content>
+      </md-card>
+
+
+    </td>
+
+    <td>
+      <md-card class="D-card">
+        <md-card-header>
+          <div md-card-avatar class="d-header-image"></div>
+          <md-card-title class="title">Disability</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+
+        <md-card-content>
+          <table>
+            <tr>
+              <td>
+                RLS:
+              </td>
+              <td>
+                {{patient.disability.rls}}
+              </td>
+
+            </tr>
+            <tr>
+              <td>
+                GCS:
+              </td>
+              <td>
+                {{patient.disability.gcs}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.disability.glucose">
+              <td>
+                Glucose:
+              </td>
+              <td>
+                {{patient.disability.glucose}}
+              </td>
+            </tr>
+
+            <tr *ngIf="patient.disability.description">
+              <td>
+                Desc:
+              </td>
+              <td>
+                {{patient.disability.description}}
+              </td>
+            </tr>
+          </table>
+        </md-card-content>
+      </md-card>
+    </td>
+
+  </tr>
+
+
+  <!--E-->
+  <tr>
+    <td colspan="2">
+
+      <md-card class="E-card" *ngIf="patient.exposure">
+        <md-card-header>
+          <div md-card-avatar class="e-header-image"></div>
+          <md-card-title class="title">Exposure</md-card-title>
+          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
+        </md-card-header>
+
+        <md-card-content>
+          <table>
+            <tr *ngIf="patient.exposure.temperature">
+              <td>
+                Temperature:
+              </td>
+              <td>
+                {{patient.exposure.temperature}}
+              </td>
+
+            </tr>
+
+            <tr *ngIf="patient.exposure.description">
+              <td>
+                Desc:
+              </td>
+              <td>
+                {{patient.exposure.description}}
+              </td>
+            </tr>
+          </table>
+        </md-card-content>
+      </md-card>
+
+    </td>
+  </tr>
+</table>
+
+
+<div md-dialog-actions>
+  <button md-button md-raised-button (click)="dialogRef.close('ok')">OK</button>
+  <button md-button md-raised-button (click)="dialogRef.close('move')">Move Patient</button>
+</div>

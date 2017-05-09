@@ -13,7 +13,7 @@ var patientSchema = mongoose.Schema({
     age: Number,
     gender:String,
     triage:String,//[RED,ORANGE,YELLOW,GREEN,BLACK]
-    injures: [{type:String}], //list of injures
+    description: {type:String,default:""}, //list of injures
     airway:Object,//{type:[OK, THREAD,BLOCKED],description:String}
     breathing:Object, //{RP:[Fast >30,Normal >10 >30,etc.],SPO2:String,CIANOSIS:[etc.], description:String}
     circulation:Object,//similar to breathing see table from the scenario + casuality card

@@ -3,6 +3,7 @@
     <span>{{title}}</span>
     <span class="example-spacer"></span>
     <span>Time {{this.timer.minutes}}:{{this.timer.seconds}}</span>
+    <button (click)="logOut()">Log Out</button>
   </md-toolbar-row>
 
 </md-toolbar>
@@ -40,6 +41,16 @@
 
            <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
         </g>
+
+
+        <!--show patients at ED before the accident-->
+        <g *ngFor="let patientEd of patientsAtED">
+          <image xlink:href=""   [attr.xlink:href]="patientEd.imgUrl"
+                  height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
+          <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"  font-size="8" (click)="patientEdClick($event,patientEd.identificator)"  >{{patientEd.identificator}}</text>
+        </g>
+
+
       </svg>
 
     </td>

@@ -93,6 +93,32 @@ module.exports.joinGame = function (gameId,user,callback) {
         }
     })
 
+};
+
+
+module.exports.leftGame = function (gameId,user,callback) {
+
+        Game.findOne({_id:new ObjectId(gameId.toString())},function (err,game) {
+
+            if(user.role === "LEADER"){
+                game.leader = null;
+                game.save(function (err,newGame) {
+                    getGameById(newGame._id,function (populatedGame) {
+                        callback(populatedGame);
+                    })
+                });
+            }
+            else{
+               game.teams.splice(game.teams.indexOf(user._id),1);
+               game.save(function (err,newGame) {
+                   getGameById(newGame._id,function (populatedGame) {
+                       callback(populatedGame);
+                   })
+               })
+            }
+        })
+
+
 }
 
 

@@ -33,7 +33,9 @@ export class ChatService {
     this.socket = io(this.serverUrl);
   }
 
-  disconnect(){
+  disconnect(data){
+
+    this.socket.emit("logout",JSON.stringify(data));
     this.socket.disconnect();
   }
 }

@@ -1,0 +1,17 @@
+<h1 md-dialog-title>Patient Overview</h1>
+<table>
+  <tr>
+    <td>
+      <img src="{{imgUrl}}" width="60" height="60">
+    </td>
+
+    <td>
+       <h3>{{name}},{{age}} år </h3>
+       <span>{{description}}</span>
+    </td>
+  </tr>
+</table>
+<div md-dialog-actions>
+  <button md-button md-raised-button (click)="dialogRef.close('abcde')">ABCDE Info</button>
+  <button md-button md-raised-button (click)="dialogRef.close('move')">Move Patient</button>
+</div>

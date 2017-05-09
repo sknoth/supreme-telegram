@@ -12,7 +12,10 @@ import { MdDataTableModule } from 'ng2-md-datatable';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GamemapComponent } from './gamemap/gamemap.component';
+import {
+  GamemapComponent, MovePatientDialogComponent, NotificationDialogComponent, PatientDialogComponent,
+  PatientInfoDialogComponent
+} from './gamemap/gamemap.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {ScenarioComponent} from './admin/scenario.component';
@@ -43,7 +46,12 @@ import {ChatService} from "./chat.service";
     PatientComponent,
     PatientDetailComponent,
     RolesComponent,
-    DoctorDialogComponent
+    DoctorDialogComponent,
+    PatientDialogComponent,
+    MovePatientDialogComponent,
+    PatientInfoDialogComponent,
+    NotificationDialogComponent
+
 
   ],
   imports: [
@@ -65,7 +73,11 @@ import {ChatService} from "./chat.service";
   bootstrap: [AppComponent],
   entryComponents:[
 
-    DoctorDialogComponent
+    DoctorDialogComponent,
+    PatientDialogComponent,
+    MovePatientDialogComponent,
+    PatientInfoDialogComponent,
+    NotificationDialogComponent
   ]
 })
 export class AppModule { }

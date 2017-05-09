@@ -95,7 +95,7 @@ io.on('connection', function(socket) {
 
 
 
-
+        console.log(data.scenarioId);
         //check if the game is already exists
         gameCtrl.isGameExists(data.scenarioId,function (games) {
             if(games != null){
@@ -160,6 +160,43 @@ io.on('connection', function(socket) {
 
     });
 
+
+    socket.on('logout',function (message) {
+
+        console.log("user is logout");
+
+
+        var data = JSON.parse(message);
+
+        console.log(data.user);
+
+        //update the game
+
+
+
+        for (var i =0; i < onlineUsers.length; i++)
+            if (onlineUsers[i].user._id === data.user._id) {
+
+                onlineUsers.splice(i,1);
+                //notify the rest players in the game
+
+                if(data.user.role === "LEADER"){
+                    io.emit('message',{topic:'left-game',data:"LEADER"});
+                }
+                else{
+                    io.emit('message',{topic:'left-game',data:data.user.team.name});
+                }
+
+                break;
+            }
+
+
+        //update the game
+        gameCtrl.leftGame(data.gameId,data.user,function (updatedGame) {
+            console.log(updatedGame);
+            io.emit('message',{topic:'update-game',data:updatedGame});
+        });
+    });
 
 
 
