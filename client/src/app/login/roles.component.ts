@@ -15,9 +15,10 @@ import {
 } from '@angular/forms';
 
 import { UserService } from '../user.service';
-import {ChatService} from '../chat.service';
+import { ChatService } from '../chat.service';
+import { GameStore } from '../state/game.store';
 
-import {IUser} from "../admin.interfaces";
+import { IUser } from "../admin.interfaces";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 
 import {MdDialog, MdDialogRef} from '@angular/material';
@@ -33,8 +34,6 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 })
 export class RolesComponent implements OnInit {
 
-
-
   name:string;
   surname:string;
   scenarioId:string;
@@ -46,38 +45,53 @@ export class RolesComponent implements OnInit {
 
   user:IUser;
 
+  // game: IGame;
+
   constructor(
     @Inject(FormBuilder) _formBuilder : FormBuilder,
-    private _userService: UserService, private _chatService:ChatService,private router: Router,private route: ActivatedRoute,public dialog: MdDialog
+    private _userService: UserService,
+    private _chatService:ChatService,
+    private _gameStore: GameStore,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MdDialog
   ) {
 
+    this._chatService.connect();
 
-  }
+    // this._chatService.getMessages().subscribe(message => {
+    //
+    //    console.log('_chatService message', message);
+    //
+    //    if(message['topic'] === "join-game") {
+    //
+    //      console.log("ROSES Join Game",message['data']);
+    //     //  this.game = message['data'];
+    //
+    //
+    //    }
+    // });
 
-  ngOnInit() {
+
     //reading route parameters
-    this.route.params.subscribe(params=>{
+    this.route.params.subscribe(params => {
       this.name = params['name'];
       this.surname = params['surname'];
       this.scenarioId = params['scenario'];
       this.location = {x:0,y:0};
-
     })
 
-
-    this._chatService.connect();
-
-    this._chatService.getMessages().subscribe(message=>{
-       //console.log(message);
-
-      if(message['topic'] === "disable-leader"){
-
-        this.leader_disabled = true; //TODO:disabel leader button, this code does not work, do not know why?
-
+    this._gameStore.game.debounceTime(1000).subscribe((game) => {
+      console.log('Game in Roles cmp', game);
+      if (game.leader) {
+        console.log('game.leader', game.leader);
+        this.leader_disabled = true;
       }
-
-
     });
+  }
+
+  ngOnInit() {
+
   }
 
   /**
@@ -88,12 +102,11 @@ export class RolesComponent implements OnInit {
      //console.log(role);
      this.role = role;
 
-
-     if(this.role === "NURSE"){
+     if (this.role === "NURSE") {
        this.openDialog();
      }
-     else{
-       this.location= {x:280,y:276};
+     else {
+       this.location = {x:280,y:276};
        this.logIn();
      }
 
@@ -111,8 +124,6 @@ export class RolesComponent implements OnInit {
 
   logIn(){
 
-
-
     let user : IUser = {
       name:this.name,
       surname:this.surname,
@@ -124,25 +135,22 @@ export class RolesComponent implements OnInit {
     //create user
     this._userService.addUser(user).subscribe((v)=>{
 
-
       //notify all
-      this._chatService.sendMessage("login",JSON.stringify({user:v,scenarioId:this.scenarioId,doctor:this.doctor}));
-
-
+      this._chatService.sendMessage("login", JSON.stringify({
+        user:v,
+        scenarioId:this.scenarioId,
+        doctor:this.doctor
+      }));
 
       this._userService.setUser(v);
-
 
       //show gamemap view
       this.router.navigate(['/gamemap',this.scenarioId]);
     });
 
-
-
   }
 
 }
-
 
 
 @Component({

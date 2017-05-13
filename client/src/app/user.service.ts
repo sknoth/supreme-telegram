@@ -21,19 +21,16 @@ export class UserService {
     private _http: Http
   ) { }
 
-  setUser(user:IUser){
-
+  setUser(user: IUser) {
     this.user = user;
-
   }
 
-  getUser(){
+  getUser() {
     console.log(this.user);
     return this.user;
   }
 
   addUser(user) {
-    //console.log('addUser', user);
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -45,7 +42,7 @@ export class UserService {
 
   }
 
-  getUserById(userId){
+  getUserById(userId) {
     return this._http.get(this.serverUrl + '/users/' + userId)
       .map(data => { return data.json(); })
       .catch(this.handleError);
@@ -62,7 +59,18 @@ export class UserService {
     return this._http.get(this.userUrl)
                   .map(data => { return data.json().users; })
                   .catch(this.handleError);
-}
+  }
+
+  updateUser(userId, user) {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this._http.post(this.serverUrl + "/user/" + userId, user, options)
+                    .map(res => { return  res.json()})
+                    .catch(this.handleError);
+  }
+
 
   private handleError (error: Response | any) {
     // In a real world app, you might use a remote logging infrastructure

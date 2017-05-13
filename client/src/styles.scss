@@ -14,3 +14,28 @@ $color-accent-contrast: $color-dark-contrast;
 
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+html,
+body {
+  height: 100%;
+}
+
+/* if portrait mode is detected, rotate the entire site -90 degrees to hint rotating to landscape */
+@media (orientation: portrait) {
+  body {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+}
+
+.input-full-width {
+    width: 100%;
+    margin: 10px auto;
+}
+
+.hint {
+  color: #09b3f1;
+}

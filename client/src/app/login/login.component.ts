@@ -13,6 +13,7 @@ import {
 
 import { UserService } from '../user.service';
 import {AdminService} from '../admin.service';
+import { GameStore } from '../state/game.store';
 import {IScenario, IUser} from "../admin.interfaces";
 import {Router} from "@angular/router";
 
@@ -28,14 +29,13 @@ export class LoginComponent implements OnInit {
 
   scenarios:IScenario[];
 
-
-
   constructor(
     @Inject(FormBuilder) _formBuilder : FormBuilder,
-    private _adminService:AdminService, private router: Router
+    private _adminService: AdminService,
+    private _userService: UserService,
+    private _gameStore: GameStore,
+    private router: Router
   ) {
-
-
 
     this.loginForm = _formBuilder.group( {
         name : ['', Validators.required],
@@ -54,8 +54,14 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
 
-    this.router.navigate(['/roles',this.loginForm.controls.name.value,this.loginForm.controls.surname.value,this.loginForm.controls.scenario.value]);
-
+    // don't know why router.navigate gets called like this but it works
+    // should better use route resolver
+    this._gameStore.loadGame(this.loginForm.controls.scenario.value,
+          this.router.navigate(['/roles',
+            this.loginForm.controls.name.value,
+            this.loginForm.controls.surname.value,
+            this.loginForm.controls.scenario.value
+          ]));
   }
 
 }

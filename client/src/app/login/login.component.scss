@@ -1,9 +1,24 @@
+.page-login {
+  background-image: url('/assets/logo1.png');
+  display: block;
+  height: 100%;
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
 .login-card{
+  top: 37vh;
+  left: 42vw;
   width: 400px;
 }
 
-.input-full-width {
-    width: 100%;
+h3 {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  text-align: center;
 }
 
-
+button {
+  margin-top: 16px;
+}

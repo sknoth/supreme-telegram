@@ -5,7 +5,6 @@
 export type ScenarioDuration = 15 | 20 | 25 ;
 
 
-
 export interface PaginableScenarios {
   scenarios: IScenario[];
   pagination: Pagination;
@@ -35,7 +34,7 @@ export interface Pagination {
 
 /*IUser*/
 
-export interface IUser{
+export interface IUser {
   name:string,
   surname:string,
   scenarioId?:string,
@@ -47,7 +46,7 @@ export interface IUser{
   location?:Object
 }
 
-export interface ITeam{
+export interface ITeam {
   name:string,
   doctor:string,
   x:number,
@@ -57,7 +56,7 @@ export interface ITeam{
 
 /*IPatient*/
 
-export interface IPatient{
+export interface IPatient {
   _id?:string,
   identificator:string,// patient A, patient B, etc.
   name: string,
@@ -79,13 +78,13 @@ export interface IPatient{
   imgUrl?:string
 }
 
-export interface IAirway{
+export interface IAirway {
    type?:string,
    description?:string,
    selectedTreatments?:[string]
 
 }
-export interface IBreathing{
+export interface IBreathing {
   af?: number,
   spo2: number,
   bfrequency?: number,
@@ -94,7 +93,7 @@ export interface IBreathing{
 
 }
 
-export interface ICirculation{
+export interface ICirculation {
   bt?: string,
   pulse?: number,
   skinType?: string,
@@ -104,7 +103,7 @@ export interface ICirculation{
   selectedTreatments?:[string],
 
 }
-export interface IDisability{
+export interface IDisability {
   rls?: string,
   gcs: number,
   glucose?: number,
@@ -112,7 +111,7 @@ export interface IDisability{
   selectedTreatments?:[string],
 
 }
-export interface IExposure{
+export interface IExposure {
   temperature?: number,
   description?: string,
   selectedTreatments?:[string],
@@ -121,7 +120,7 @@ export interface IExposure{
 
 /*IGame*/
 
-export interface IGame{
+export interface IGame {
   _id?:string;
   scenario?: IScenario, //scenarioId
 

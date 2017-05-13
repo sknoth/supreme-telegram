@@ -10,11 +10,13 @@ import {PatientComponent} from "./admin/patient.component";
 import {PatientDetailComponent} from "./admin/patient-detail.component";
 import {RolesComponent} from "./login/roles.component";
 import {NurseComponent} from "./nurse/nurse.component";
+import {ScoreComponent} from "./score/score.component";
 
 const routes: Routes = [
   {
     path: '',
-    children: []
+    redirectTo: '/login',
+    pathMatch: 'full'
   },
   {
     path: 'gamemap/:scenarioId',
@@ -51,6 +53,10 @@ const routes: Routes = [
   {
     path:'nurse',
     component:NurseComponent
+  },
+  {
+    path:'score',
+    component:ScoreComponent
   }
 ];
 

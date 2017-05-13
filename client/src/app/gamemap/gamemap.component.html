@@ -1,12 +1,9 @@
 <md-toolbar color="primary">
-  <md-toolbar-row>
     <span>{{title}}</span>
     <span class="example-spacer"></span>
-
-    <span>Time {{this.timer.minutes}}:{{this.timer.seconds}}</span>
-    <button (click)="logOut()">Log Out</button>
-  </md-toolbar-row>
-
+    <span>Time {{this.timer.minutes}}: {{this.timer.seconds}} </span>
+    <button mdl-button mdl-button-type="raised" mdl-colored="primary"
+      mdl-ripple (click)="logOut()">Log Out</button>
 </md-toolbar>
 
 <md-sidenav-container class="example-container" >
@@ -60,8 +57,6 @@
 
     </table>
 
-
-
   </md-sidenav>
 
   <div class="example-sidenav-content">
@@ -79,9 +74,6 @@
                 {{team.team.name}}
               </div>
 
-
-
-
               <!--For LEADER-->
               <button [hidden]="hideDebrifButton" md-raised-button  (click)="debriefAction()">Debriefing</button>
 
@@ -90,7 +82,6 @@
               <button  md-raised-button [hidden]="hideCallButton" md-button (click)="sidenav.open()">
                     Kontakta Andra Aktörer
               </button>
-
 
 
             </td>
@@ -104,22 +95,22 @@
                          id="map_svg" height="450" width="600" (click)="mapClick($event)" />
                 </g>
                 <!--show leader figure-->
-                <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y" fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
+                <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y"
+                  fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
 
                 <!--show teams figures-->
                 <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
 
                 <g *ngFor="let team of game.teams">
-
                    <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
                 </g>
-
 
                 <!--show patients at ED before the accident-->
                 <g *ngFor="let patientEd of patientsAtED">
                   <image xlink:href=""   [attr.xlink:href]="patientEd.imgUrl"
                           height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
-                  <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"  font-size="8" (click)="patientEdClick($event,patientEd.identificator)"  >{{patientEd.identificator}}</text>
+                  <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
+                    font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
                 </g>
 
 
@@ -134,7 +125,3 @@
   </div>
 
 </md-sidenav-container>
-
-
-
-

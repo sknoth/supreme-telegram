@@ -30,11 +30,14 @@ import {NurseComponent} from "./nurse/nurse.component";
 
 import { UserService } from './user.service';
 import {AdminService} from "./admin.service";
+import { GameService } from "./game.service";
 
 
 //Material components used in this application
 import { MaterialModule } from '@angular/material';
 import {ChatService} from "./chat.service";
+import { GameStore } from "./state/game.store";
+import { ScoreComponent } from './score/score.component';
 
 
 
@@ -55,9 +58,8 @@ import {ChatService} from "./chat.service";
     PatientInfoDialogComponent,
     NotificationDialogComponent,
     InputDialogComponent,
-    NurseComponent
-
-
+    NurseComponent,
+    ScoreComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +76,13 @@ import {ChatService} from "./chat.service";
     MaterialModule.forRoot() //deprecated!!!
 
   ],
-  providers: [UserService,AdminService,ChatService],
+  providers: [
+    UserService,
+    AdminService,
+    ChatService,
+    GameStore,
+    GameService
+  ],
   bootstrap: [AppComponent],
   entryComponents:[
 

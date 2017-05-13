@@ -1,78 +1,68 @@
-Welcome {{name}}
-
-<h2> Select Your Role</h2>
-
-<table>
-  <tr>
-    <td>
-      <!--LEADER CARD-->
-      <md-card class="role-card">
-        <md-card-header>
-          <!--<div md-card-avatar class="login-header-image"></div>-->
-          <md-card-title>LEADER</md-card-title>
-          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
-        </md-card-header>
-        <img md-card-image src="../assets/leader_square.png">
-        <md-card-content>
-          <p>Takes disicions about the allocation of resources.
-            Decides which team (nurse+doctor) will take care
-            of the patient and in which room.
-          </p>
-        </md-card-content>
-
-        <md-card-actions>
-          {{leader_disabled}}
-          <button md-button md-raised-button [disabled]="leader_disabled" (click)="setRole('LEADER');">SELECT</button>
-        </md-card-actions>
-      </md-card>
-    </td>
-
-    <td>
-      <!--NURSE CARD-->
-      <md-card class="role-card">
-        <md-card-header>
-          <!--<div md-card-avatar class="login-header-image"></div>-->
-          <md-card-title>NURSE</md-card-title>
-          <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
-        </md-card-header>
-        <img md-card-image src="../assets/nurse_triangle.png">
-        <md-card-content>
-          <p>
-            Provides a treatment to a patient.
-          </p>
-        </md-card-content>
-
-        <md-card-actions>
-          <button md-button md-raised-button (click)="setRole('NURSE');">SELECT</button>
-        </md-card-actions>
-      </md-card>
-    </td>
 
 
-   <td>
-     <!--RESERVED NURSE CARD-->
-     <md-card class="role-card">
-       <md-card-header>
-         <!--<div md-card-avatar class="login-header-image"></div>-->
-         <md-card-title>RESERVED NURSE</md-card-title>
-         <!--<md-card-subtitle>Dog Breed</md-card-subtitle>-->
-       </md-card-header>
-       <img md-card-image src="../assets/nurse_triangle.png">
-       <md-card-content>
-         <p>
-           Provides a treatment to a patient.
-           Called by a leader as additional resource
-           to handle a catastrophic situation.
+<h3 class="title">Welcome {{name}}, please select Your Role:</h3>
 
-         </p>
-       </md-card-content>
+<div class="roles">
+  <!--LEADER CARD-->
+<md-card class="role-card">
+  <md-card-header>
+    <img md-card-image src="../assets/leader_square.png">
+    <h4>LEADER</h4>
+  </md-card-header>
+  <md-card-content>
+    Takes disicions about the allocation of resources.
+      Decides which team (nurse+doctor) will take care
+      of the patient and in which room.
+  </md-card-content>
 
-       <md-card-actions>
-         <button md-button md-raised-button (click)="setRole('RESERVED_NURSE');">SELECT</button>
-       </md-card-actions>
-     </md-card>
-   </td>
+  <md-card-actions>
+    <small class="hint" *ngIf="leader_disabled">This game already has a leader</small>
+    <button mdl-button mdl-button-type="raised" mdl-colored="primary" [disabled]="leader_disabled"
+      mdl-ripple  (click)="setRole('LEADER');" class="input-full-width">
+      Select Leader
+    </button>
+  </md-card-actions>
+</md-card>
 
+<!--NURSE CARD-->
+<md-card class="role-card">
+  <md-card-header>
+    <img md-card-image src="../assets/nurse_triangle.png">
+    <h4>NURSE</h4>
+  </md-card-header>
 
-  </tr>
-</table>
+  <md-card-content>
+      Provides a treatment to a patient.
+  </md-card-content>
+
+  <md-card-actions>
+
+    <button mdl-button mdl-button-type="raised" mdl-colored="primary"
+      mdl-ripple  (click)="setRole('NURSE');" class="input-full-width">
+      Select Nurse
+    </button>
+  </md-card-actions>
+</md-card>
+
+<!--RESERVED NURSE CARD-->
+<md-card class="role-card">
+  <md-card-header>
+    <img md-card-image src="../assets/nurse_triangle.png">
+    <h4>RESERVED NURSE</h4>
+  </md-card-header>
+
+  <md-card-content>
+      Provides a treatment to a patient.
+      Called by a leader as additional resource
+      to handle a catastrophic situation.
+  </md-card-content>
+
+  <md-card-actions>
+    <button mdl-button mdl-button-type="raised" mdl-colored="primary"
+      mdl-ripple  (click)="setRole('RESERVED_NURSE');" class="input-full-width">
+      Select Reserve Nurse
+    </button>
+  </md-card-actions>
+</md-card>
+
+</div>

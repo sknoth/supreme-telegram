@@ -6,6 +6,8 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {MdDialog, MdDialogRef} from "@angular/material";
 import {IGame, IPatient, IUser} from "../admin.interfaces";
 
+import { GameStore } from '../state/game.store';
+
 @Component({
   selector: 'app-gamemap',
   templateUrl: './gamemap.component.html',
@@ -15,12 +17,12 @@ import {IGame, IPatient, IUser} from "../admin.interfaces";
 export class GamemapComponent implements OnInit,AfterViewInit {
 
   user:IUser; //current user
-  scenarioId:string;
+  // scenarioId:string;
   game:IGame;
 
   timer:{minutes:string,seconds:string};
 
-  title = "Waiting for other users to be log in......";
+  title = "Waiting for other users to be logged in......";
   //in milliseonds
   timeToshowASHET = 30000;//in 30 seconds
 
@@ -33,58 +35,54 @@ export class GamemapComponent implements OnInit,AfterViewInit {
   patientsAtED:IPatient[];
 
 
-  constructor(private _userService: UserService, private renderer: Renderer2,private _chatService:ChatService,private router: Router,private route: ActivatedRoute,public dialog: MdDialog) {
-    this.game = {
-      teams:[],
-      totalActions:0,
-      timeSpend:'00:00'
-    };
+  constructor(
+    private _userService: UserService,
+    private renderer: Renderer2,
+    private _chatService:ChatService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public dialog: MdDialog,
+    private _gameStore: GameStore) {
 
-    this.timer= {minutes:"00",seconds:"00"};
+      this._gameStore.game.subscribe((game) => {
+        this.game = game;
+      });
 
-    this.initPatientAtED();
+      this.timer = { minutes:"00", seconds:"00"};
 
-    this.user = _userService.getUser()
+      this.initPatientAtED();
 
+      this.user = _userService.getUser()
 
   }
 
   ngOnInit() {
 
+    this._chatService.getMessages().subscribe((message) => {
 
-    //reading route parameters
-    this.route.params.subscribe(params=>{
+      if(message['topic'] === "join-game") {
 
-      this.scenarioId = params['scenarioId'];
+        console.log("Join Game", this.game._id);
 
-    });
-
-
-    this._chatService.getMessages().subscribe((message)=>{
-
-
-      if(message['topic'] === "join-game"){
-
-        console.log("Join Game");
-        this.game = message['data'];
-
-
-        if(this.game.isStarted){
-
-          this.title= "Game was already started...";
+        if (this.game.isStarted) {
+          this.title = "Game was already started...";
         }
-
       }
 
-      else if(message['topic'] ==="game-start"){
-        this.title="Game Started!";
+      else if(message['topic'] === "game-start") {
 
+        this.title = "Game Started!";
 
         if(this.user.role === "LEADER"){
           console.log(this.game.scenario);
-          //send notification to the leader about accident
-          this.openNotificationDialog("Incoming Call from Ambulance",this.game.scenario.description + "<p>" +this.game.scenario.metana_report +"</p>","methane","../assets/ambulance_call_icon.png","");
 
+          //send notification to the leader about accident
+          this.openNotificationDialog(
+            "Incoming Call from Ambulance",
+            this.game.scenario.description + "<p>" +this.game.scenario.metana_report +"</p>",
+            "methane",
+            "../assets/ambulance_call_icon.png",""
+          );
 
           //after 30 seconds show ASHET report
           let dialogContent = this.game.scenario.ashet_report;
@@ -92,56 +90,54 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
           //show ashet report in 30seconds ->should be changed
           setTimeout(function () {
-            that.openNotificationDialog("Incoming Call with ASHET report",dialogContent,"ashet","../assets/ambulance_call_icon.png","");
+            that.openNotificationDialog(
+              "Incoming Call with ASHET report",
+              dialogContent,
+              "ashet",
+              "../assets/ambulance_call_icon.png",""
+            );
 
-          },this.timeToshowASHET);
+          }, this.timeToshowASHET);
 
-        }
-        else{
+        } else {
           //send notification to the nurses "wait for the leader to be contacted"
           this.title = "Wait to be contacted by the Leader....";
         }
 
-      }
-      else if(message['topic']==="timer"){
+      } else if (message['topic'] === "timer") {
+console.log('timer', message);
 
         this.timer = message['data'];
 
+      } else if (message['topic']==="game-over") {
 
-      }
-      else if(message['topic']==="game-over"){
+        this.openNotificationDialog("Game Over", "The game is over", 'gameover');
 
-      }
-      else if(message['topic']==="left-game"){
+      } else if (message['topic']==="left-game") {
+
         console.log("user is offline!");
         console.log(message['data']);
 
         this.openNotificationDialog("Left Game",message['data'] + "has left the game!");
 
-      }
-      else if(message['topic'] ==="update-game"){
+      } else if (message['topic'] ==="update-game") {
         console.log("game was updated!");
         this.game = message['data'];
       }
 
     });
 
-
-
     // make the gamemap view as in the paper prototype for leader
     // make the gamemap view for nurses: visualize the map, users on the map, header is same as in leader gamemapview
-
 
   }
 
 
   ngAfterViewInit() {
 
-
-
   }
 
-  logOut(){
+  logOut() {
     this._chatService.disconnect({user:this.user,gameId:this.game._id});
 
     //redirect to login page
@@ -167,13 +163,13 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
   /***USER ACTIONS****/
 
-  debriefAction(){
+  debriefAction() {
     this.user.actions.push({name:"Debriefing",time:new Date()});
     this.title ="Inform all personal about the accident.";
     this.hideDebrifButton = true;
   }
 
-  contactUnit(unit){
+  contactUnit(unit) {
     this.user.actions.push({name:"Kontakta " + unit,time:new Date()});
     //disable the button
 
@@ -196,20 +192,25 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     dialogRef.componentInstance.result = result;
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if(result === "methane"){
+      console.log('dialogRef.afterClosed()', result, this.user);
+
+      if (result === "methane") {
+        this.user.actions.push({name:"methane", time:new Date()});
         //show button Debriefing
-
         this.title = "Use button Debriefing to start to notify all personal about the accident";
-
         this.hideDebrifButton = false;
-      }
-      else if (result ==="ashet"){
+
+      } else if (result === "ashet") {
+        this.user.actions.push({name:"ashet", time:new Date()});
+
         this.title = "Inform the rest.....";
         this.hideDebrifButton = true;
 
         //show all 9 buttons
         this.hideCallButton = false;
+
+      } else if (result === "gameover") {
+        this.router.navigate(['/score']);
       }
     });
 
@@ -270,8 +271,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
-
-
+      this.user.actions.push({name:"Moved Patient to " + result, time:new Date()});
     });
 
   }
