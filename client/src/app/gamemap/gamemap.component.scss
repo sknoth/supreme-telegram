@@ -2,6 +2,10 @@
   flex: 1 1 auto;
 }
 
+.example-sidenav {
+  width: 200px;
+}
+
 md-toolbar button { margin-left: 24px; }
 
 .hospital_map{
@@ -12,4 +16,11 @@ md-toolbar button { margin-left: 24px; }
 
 .input-full-width {
   width: 100%;
+}
+
+.content {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: center;
 }

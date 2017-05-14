@@ -30,6 +30,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
   hideDebrifButton = true;
   hideCallButton = true;
 
+  contacted = {};
 
   //patients that are located in the hospital before the accident happened
   patientsAtED:IPatient[];
@@ -73,7 +74,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
         this.title = "Game Started!";
 
-        if(this.user.role === "LEADER"){
+        if (this.user.role === "LEADER") {
           console.log(this.game.scenario);
 
           //send notification to the leader about accident
@@ -169,7 +170,9 @@ console.log('timer', message);
     this.hideDebrifButton = true;
   }
 
-  contactUnit(unit) {
+  contactUnit(unit, e?) {
+    console.log('contactUnit', unit, e);
+    this.contacted[unit] = true;
     this.user.actions.push({name:"Kontakta " + unit,time:new Date()});
     //disable the button
 
@@ -264,20 +267,19 @@ console.log('timer', message);
    *
    * @param pIdentificator e.g., patient1,P1,patientA, etc.
    */
-  openMovePatientDialog(pIdentificator){
+  openMovePatientDialog(pIdentificator) {
 
     let dialogRef = this.dialog.open(MovePatientDialogComponent);
     dialogRef.componentInstance.identificator = pIdentificator;
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      console.log(result, pIdentificator, this.game);
       this.user.actions.push({name:"Moved Patient to " + result, time:new Date()});
     });
 
   }
 
-
-  openPatientInfoDialog(patient){
+  openPatientInfoDialog(patient) {
     console.log(patient);
 
     let dialogRef = this.dialog.open(PatientInfoDialogComponent);
@@ -293,9 +295,7 @@ console.log('timer', message);
   }
 
   /*****Patients at ED*******/
-
-
-  initPatientAtED(){
+  initPatientAtED() {
     //hard code patients at ED before the accident
     var patient1 = {
       identificator:"P1",

@@ -6,122 +6,94 @@
       mdl-ripple (click)="logOut()">Log Out</button>
 </md-toolbar>
 
-<md-sidenav-container class="example-container" >
-  <md-sidenav #sidenav class="example-sidenav">
-    <table>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('Centrumchef')">Kontakta Centrumchef</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button  class="input-full-width"(click)="contactUnit('Verksamhetschef')">Kontakta Verksamhetschef</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('Avledningschef')">Kontakta Avledningschef</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('LAS')">Kontakta LAS AVA</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('Skiftesledare')">Kontakta Skiftesledare</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('Bakjour')">Kontakta Bakjour</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('KiB')">Kontakta KiB</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button  class="input-full-width"(click)="contactUnit('X-Rey')">Kontakta X-Rey</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button md-raised-button class="input-full-width" (click)="contactUnit('Klinikavdelning')">Kontakta Klinikavdelning</button>
-        </td>
-      </tr>
 
-    </table>
+    <md-sidenav-container>
+      <md-sidenav #sidenav class="example-sidenav">
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Centrumchef" (click)="contactUnit('Centrumchef')">
+          Kontakta Centrumchef<i *ngIf="contacted.Centrumchef" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Verksamhetschef" (click)="contactUnit('Verksamhetschef')">
+          Kontakta Verksamhetschef<i *ngIf="contacted.Verksamhetschef" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Avledningschef" (click)="contactUnit('Avledningschef', $event)">
+          Kontakta Avledningschef<i *ngIf="contacted.Avledningschef" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.LAS" (click)="contactUnit('LAS')">
+          Kontakta LAS AVA<i *ngIf="contacted.LAS" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Skiftesledare" (click)="contactUnit('Skiftesledare')">
+          Kontakta Skiftesledare<i *ngIf="contacted.Skiftesledare" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Bakjour" (click)="contactUnit('Bakjour')">
+          Kontakta Bakjour<i *ngIf="contacted.Bakjour" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.KiB" (click)="contactUnit('KiB')">
+          Kontakta KiB<i *ngIf="contacted.KiB" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.XRey" (click)="contactUnit('XRey')">
+          Kontakta X-Rey<i *ngIf="contacted.XRey" class="material-icons">done</i></button>
+        <button md-raised-button class="input-full-width"
+          [disabled]="contacted.Klinikavdelning" (click)="contactUnit('Klinikavdelning')">
+          Kontakta Klinikavdelning<i *ngIf="contacted.Klinikavdelning" class="material-icons">done</i></button>
+      </md-sidenav>
 
-  </md-sidenav>
+      <!-- primary content -->
+      <div class="content">
+        <aside>
 
-  <div class="example-sidenav-content">
+          <div *ngIf="user">
+            {{user.name}}
+            {{user.role}}
 
-        <table>
-          <tr>
-            <td>
-              <div *ngIf="user">
-                {{user.name}}
-                {{user.role}}
+          </div>
 
-              </div>
+          <div *ngFor="let team of game.teams">
+            {{team.team.name}}
+          </div>
 
-              <div *ngFor="let team of game.teams">
-                {{team.team.name}}
-              </div>
+          <!--For LEADER-->
+          <button [hidden]="hideDebrifButton" md-raised-button  (click)="debriefAction()">Debriefing</button>
 
-              <!--For LEADER-->
-              <button [hidden]="hideDebrifButton" md-raised-button  (click)="debriefAction()">Debriefing</button>
+          <!--For LEADER-->
+          <button  md-raised-button [hidden]="hideCallButton" md-button (click)="sidenav.open()">
+                Kontakta Andra Aktörer
+          </button>
+        </aside>
 
+        <svg #hospital_map
+         x="0"
+         y="0"
+         width="100%"
+         height="100%"
+         version="1.1"
+         viewBox="0 0 600 450"
+         xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g>
+            <title>Hospital Map</title>
+            <image xlink:href="../assets/hospital_map.png"
+                   id="map_svg" height="450" width="600" (click)="mapClick($event)" />
+          </g>
+          <!--show leader figure-->
+          <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y"
+            fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
 
-              <!--For LEADER-->
-              <button  md-raised-button [hidden]="hideCallButton" md-button (click)="sidenav.open()">
-                    Kontakta Andra Aktörer
-              </button>
+          <!--show teams figures-->
+          <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
 
+          <g *ngFor="let team of game.teams">
+             <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
+          </g>
 
-            </td>
-            <td>
-              <!--<img class="hospital_map" src="../assets/hospital_map.png">-->
-              <svg #hospital_map width="600" height="450" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink">
-                <g>
-                  <title>Hospital Map</title>
-                  <image xlink:href="../assets/hospital_map.png"
-                         id="map_svg" height="450" width="600" (click)="mapClick($event)" />
-                </g>
-                <!--show leader figure-->
-                <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y"
-                  fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
+          <!--show patients at ED before the accident-->
+          <g *ngFor="let patientEd of patientsAtED">
+            <image xlink:href="" [attr.xlink:href]="patientEd.imgUrl"
+                    height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
+            <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
+              font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
+          </g>
+        </svg>
+      </div>
 
-                <!--show teams figures-->
-                <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
-
-                <g *ngFor="let team of game.teams">
-                   <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
-                </g>
-
-                <!--show patients at ED before the accident-->
-                <g *ngFor="let patientEd of patientsAtED">
-                  <image xlink:href=""   [attr.xlink:href]="patientEd.imgUrl"
-                          height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
-                  <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
-                    font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
-                </g>
-
-
-              </svg>
-
-            </td>
-
-          </tr>
-
-        </table>
-
-  </div>
-
-</md-sidenav-container>
+    </md-sidenav-container>
