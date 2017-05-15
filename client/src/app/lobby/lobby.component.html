@@ -1,0 +1,50 @@
+<h3>Select Your Role</h3>
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--4-col">
+    <mdl-card class="demo-card-square" mdl-shadow="2">
+      <mdl-card-title mdl-card-expand>
+        <h2 mdl-card-title-text>Leader</h2>
+      </mdl-card-title>
+      <mdl-card-supporting-text>
+        Makes Decisions about allocation of resources. Decides which team (nurse + doctor)
+        will take care of the patient and in which room.
+      </mdl-card-supporting-text>
+      <mdl-card-actions mdl-card-border>
+        <button (click)="onSelectRole('leader')" mdl-button mdl-colored mdl-ripple mdl-button-type="raised" mdl-colored="primary">
+          Select
+        </button>
+      </mdl-card-actions>
+    </mdl-card>
+  </div>
+  <div class="mdl-cell mdl-cell--4-col">
+    <mdl-card class="demo-card-square" mdl-shadow="2">
+      <mdl-card-title mdl-card-expand>
+        <h2 mdl-card-title-text>Nurse</h2>
+      </mdl-card-title>
+      <mdl-card-supporting-text>
+        Provides treatment for a patient.
+      </mdl-card-supporting-text>
+      <mdl-card-actions mdl-card-border>
+        <button (click)="onSelectRole('nurse')" mdl-button mdl-colored mdl-ripple mdl-button-type="raised" mdl-colored="primary">
+          Select
+        </button>
+      </mdl-card-actions>
+    </mdl-card>
+  </div>
+  <div class="mdl-cell mdl-cell--4-col">
+    <mdl-card class="demo-card-square" mdl-shadow="2">
+      <mdl-card-title mdl-card-expand>
+        <h2 mdl-card-title-text>Reserve Nurse</h2>
+      </mdl-card-title>
+      <mdl-card-supporting-text>
+        Provides treatment for a patient. Called by the leader as additional resource
+        to handle a catastrophic situation.
+      </mdl-card-supporting-text>
+      <mdl-card-actions mdl-card-border>
+        <button (click)="onSelectRole('reserve')" mdl-button mdl-colored mdl-ripple mdl-button-type="raised" mdl-colored="primary">
+          Select
+        </button>
+      </mdl-card-actions>
+    </mdl-card>
+  </div>
+</div>
