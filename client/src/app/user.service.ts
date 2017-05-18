@@ -22,7 +22,9 @@ export class UserService {
   ) { }
 
   setUser(user: IUser) {
+
     this.user = user;
+    console.log(this.user);
   }
 
   getUser() {
@@ -61,12 +63,12 @@ export class UserService {
                   .catch(this.handleError);
   }
 
-  updateUser(userId, user) {
-
+  updateUser(user) {
+    console.log("update user!");
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this._http.post(this.serverUrl + "/user/" + userId, user, options)
+    return this._http.post(this.serverUrl + "/users/update", user, options)
                     .map(res => { return  res.json()})
                     .catch(this.handleError);
   }

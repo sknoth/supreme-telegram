@@ -3,7 +3,7 @@ import {Component, OnInit, ElementRef, AfterViewInit, Renderer2, ViewChild} from
 import { UserService } from '../user.service';
 import {ChatService} from '../chat.service';
 import {ActivatedRoute, Params, Router} from "@angular/router";
-import {MdDialog, MdDialogRef} from "@angular/material";
+import {MdDialog, MdDialogRef, MdSidenav} from "@angular/material";
 import {IGame, IPatient, IUser} from "../admin.interfaces";
 
 import { GameStore } from '../state/game.store';
@@ -24,11 +24,16 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
   title = "Waiting for other users to be logged in......";
   //in milliseonds
-  timeToshowASHET = 30000;//in 30 seconds
+  timeToshowASHET = 3000;//in 30 seconds
 
   //UI
   hideDebrifButton = true;
   hideCallButton = true;
+  hideActionButton = true;
+
+
+  // Sidemenu 9 buttons
+  @ViewChild('sidenav') sidenav: MdSidenav;
 
   contacted = {};
 
@@ -45,25 +50,30 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     public dialog: MdDialog,
     private _gameStore: GameStore) {
 
-      this._gameStore.game.subscribe((game) => {
+
+      /*this._gameStore.game.subscribe((game) => {
         this.game = game;
-      });
+      });*/
 
       this.timer = { minutes:"00", seconds:"00"};
 
       this.initPatientAtED();
 
       this.user = _userService.getUser()
+      console.log(this.user);
 
   }
 
   ngOnInit() {
 
+
     this._chatService.getMessages().subscribe((message) => {
 
       if(message['topic'] === "join-game") {
 
-        console.log("Join Game", this.game._id);
+        console.log("Join Game");
+        this.game = message['data'];
+        console.log(message['data']);
 
         if (this.game.isStarted) {
           this.title = "Game was already started...";
@@ -106,7 +116,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
         }
 
       } else if (message['topic'] === "timer") {
-console.log('timer', message);
+        //console.log('timer', message);
 
         this.timer = message['data'];
 
@@ -124,7 +134,18 @@ console.log('timer', message);
       } else if (message['topic'] ==="update-game") {
         console.log("game was updated!");
         this.game = message['data'];
+        console.log(this.game);
       }
+      else if(message['topic']==="action-card"){
+          console.log("here!");
+          console.log(message['data']);
+          if(this.user._id === message['data'].user._id){
+            this.user = message['data'].user;
+            //show action card dialog
+            this.openNotificationDialog("Action Card", "Your teams is " + message['data'].content);
+
+          }
+      };
 
     });
 
@@ -166,6 +187,7 @@ console.log('timer', message);
 
   debriefAction() {
     this.user.actions.push({name:"Debriefing",time:new Date()});
+    this._userService.updateUser(this.user);
     this.title ="Inform all personal about the accident.";
     this.hideDebrifButton = true;
   }
@@ -173,7 +195,12 @@ console.log('timer', message);
   contactUnit(unit, e?) {
     console.log('contactUnit', unit, e);
     this.contacted[unit] = true;
-    this.user.actions.push({name:"Kontakta " + unit,time:new Date()});
+    var action_message = "Kontakta " + unit;
+    this.user.actions.push({name:action_message,time:new Date()});
+
+    //console.log(this.user);
+    this._userService.updateUser(this.user);
+
     //disable the button
 
     //if LAS called
@@ -181,9 +208,87 @@ console.log('timer', message);
       //show input dialog;
       this.openInputDialog("Request Number of Beds","Number of Beds","las");
     }
+    else if(unit ==="Bakjour"){
+      this.openNotificationDialog("Bakjour Response","Förstärkningsläge")
+    }
+
+    if(Object.keys(this.contacted).length===9){
+      //hide all 9 buttons
+      this.sidenav.close();
+      this.hideCallButton = true;
+      this.title = "Send Actions Cards to the teams";
+      this.hideActionButton = false;
+
+
+
+
+    }
+  }
+
+  sendActionsCardsDialog(){
+
+    this.openSendActionCardDialog("Destribute the Actions Cards to the Users");
+  }
+
+
+  startPatientToArrive(){
+
   }
 
   /**DIALOGS**/
+
+  openSendActionCardDialog(title,result?,icon?,styleCSS?){
+
+
+    let dialogRef = this.dialog.open(SendActionCardDialogComponent);
+    dialogRef.componentInstance.title = title;
+    dialogRef.componentInstance.game = this.game;
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result ==="send"){
+        console.log('dialogRef.afterClosed()', dialogRef.componentInstance.card1);
+
+        //update the teams in the game
+        if(dialogRef.componentInstance.card5){
+          console.log(dialogRef.componentInstance.card5);
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card5,content:"Team1"});
+
+        }
+        if(dialogRef.componentInstance.card6){
+          console.log(dialogRef.componentInstance.card6);
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card6,content:"Team2"});
+
+        }
+        if(dialogRef.componentInstance.card7){
+          console.log(dialogRef.componentInstance.card7);
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card7,content:"Team3"});
+
+        }
+
+
+
+
+
+        this.user.actions.push({name:"Sent actions cards",time:new Date()});
+        //hide button
+        this.hideActionButton = true;
+        //move leader to the entrance hall for waiting of patients
+
+        this.user.location = {x:160,y:120};
+        this._chatService.sendMessage("user-moved",{userId:this.user._id,location:this.user.location});
+
+
+      }
+      else{
+        console.log("cancel the action cards");
+      }
+
+
+    });
+
+  }
+
+
 
   openNotificationDialog(title,content,result?,icon?,styleCSS?){
 
@@ -203,6 +308,11 @@ console.log('timer', message);
         this.title = "Use button Debriefing to start to notify all personal about the accident";
         this.hideDebrifButton = false;
 
+        //update the user action
+        this._userService.updateUser(this.user).subscribe(result=>{
+
+        });
+
       } else if (result === "ashet") {
         this.user.actions.push({name:"ashet", time:new Date()});
 
@@ -211,6 +321,10 @@ console.log('timer', message);
 
         //show all 9 buttons
         this.hideCallButton = false;
+        this._userService.updateUser(this.user).subscribe(result=>{
+
+        });;
+
 
       } else if (result === "gameover") {
         this.router.navigate(['/score']);
@@ -227,14 +341,20 @@ console.log('timer', message);
     dialogRef.componentInstance.result = result;
 
     dialogRef.afterClosed().subscribe(result => {
-      //TODO:get input value from dialog!
+
       console.log(result);
 
       if(result ==="las"){
-        console.log("Las has been contacted!");
-        this.user.actions.push({name:"Requested X number of Beds",time:new Date()});
+        //TODO:get input value from dialog!
+        console.log("Las has been contacted! " + dialogRef.componentInstance.input);
+        this.user.actions.push({name:"Requested "+dialogRef.componentInstance.input+" number of Beds",time:new Date()});
+        this._userService.updateUser(this.user).subscribe(result=>{
+
+        });
 
       }
+
+
     });
 
 
@@ -557,9 +677,34 @@ export class NotificationDialogComponent {
 export class InputDialogComponent {
   title:string;
   placeholder:string;
-  value=""; //the input that user provided
+  input:string; //the input that user provided
   result:string;//the return value from button Send
   styleCSS:string; //class name
+
+
+  constructor(public dialogRef: MdDialogRef<InputDialogComponent>) {}
+}
+
+
+@Component({
+  selector: 'app-action-card-dialog',
+  templateUrl: './send-action-card-dialog.component.html'
+
+})
+export class SendActionCardDialogComponent {
+  title:string;
+  game:IGame;
+  value=""; //the input that user provided
+  result:string;//the return value from button Send
+  styleCSS:string; //class name;
+  card1:string; //userId
+  card2:string; //userId
+  card3:string; //userId
+  card4:string; //userId
+  card5:string; //userId
+  card6:string; //userId
+  card7:string; //userId
+
 
 
   constructor(public dialogRef: MdDialogRef<InputDialogComponent>) {}

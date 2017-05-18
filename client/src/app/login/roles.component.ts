@@ -145,7 +145,9 @@ export class RolesComponent implements OnInit {
       this._userService.setUser(v);
 
       //show gamemap view
-      this.router.navigate(['/gamemap',this.scenarioId]);
+      this.router.navigate(['/gamemap',this.scenarioId])
+
+
     });
 
   }

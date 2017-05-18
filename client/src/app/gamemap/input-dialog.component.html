@@ -3,13 +3,13 @@
 <div md-dialog-content style="width: 600px">
 
   <md-input-container class="input-full-width">
-    <input #inputValue mdInput placeholder="{{placeholder}}" value="{{value}}">
+    <input #inputValue mdInput placeholder="{{placeholder}}" [(ngModel)]="input">
   </md-input-container>
 
 </div>
 
 <div md-dialog-actions>
-  <button md-button md-raised-button (click)="dialogRef.close({res:result,input:value})">Send</button>
+  <button md-button md-raised-button (click)="dialogRef.close({res:result})">Send</button>
   <button md-button md-raised-button (click)="dialogRef.close('cancel')">Cancel</button>
 
 

@@ -56,12 +56,15 @@ export class LoginComponent implements OnInit {
 
     // don't know why router.navigate gets called like this but it works
     // should better use route resolver
-    this._gameStore.loadGame(this.loginForm.controls.scenario.value,
+    //the game does not exists here -> moved on role component page
+    //this._gameStore.loadGame(this.loginForm.controls.scenario.value,
+
           this.router.navigate(['/roles',
             this.loginForm.controls.name.value,
             this.loginForm.controls.surname.value,
             this.loginForm.controls.scenario.value
-          ]));
+          ])
+    //);
   }
 
 }

@@ -1,0 +1,134 @@
+<h1 md-dialog-title>{{title}} </h1>
+
+<div md-dialog-content style="width: 600px">
+<table>
+
+  <tr>
+    <td>
+      <label>Action Card 1</label>
+      <span>Assisterande LAS, förmedlare mellan team och LAS, telefon 2603</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card1" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+
+  </tr>
+
+  <tr>
+    <td>
+      <label>Action Card 2</label>
+      <span>Telefonsammankallande 1 och 2, ringer in personal enlight lista eller skickar sms.</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card2" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+
+  </tr>
+
+  <tr>
+    <td>
+      <label>Action Card 3</label>
+      <span>Förberedare låser alla entréer och dörr mellan ambulanshall och akutrum. Förberedes sluss enligt kortet. Frigör rum 10-16 till patienter från olikan.</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card3" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+
+  </tr>
+
+  <tr>
+    <td>
+      <label>Action Card 4</label>
+      <span>Sjuksköterska slussen, registrerar och idmärker patient</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card4" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+
+  </tr>
+
+
+  <tr>
+    <td>
+      <label>Action Card 5</label>
+      <span>Team 1</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card5" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+
+  </tr>
+
+  <tr>
+    <td>
+      <label>Action Card 6</label>
+      <span>Team 2</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card6" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+  </tr>
+
+  <tr>
+    <td>
+      <label>Action Card 7</label>
+      <span>Team 3</span>
+    </td>
+
+    <td>
+      <md-select placeholder="Select User" [(ngModel)]="card7" class="input-full-width">
+        <md-option *ngFor="let user of game.teams" [value]="user._id">
+          {{user.name}} {{user.sername}}
+        </md-option>
+      </md-select>
+    </td>
+
+  </tr>
+
+
+</table>
+</div>
+
+<div md-dialog-actions>
+  <button md-button md-raised-button (click)="dialogRef.close('send')">Send</button>
+  <button md-button md-raised-button (click)="dialogRef.close('cancel')">Cancel</button>
+
+
+</div>
+

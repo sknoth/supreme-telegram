@@ -15,7 +15,7 @@ import { AppComponent } from './app.component';
 import {
   GamemapComponent, InputDialogComponent, MovePatientDialogComponent, NotificationDialogComponent,
   PatientDialogComponent,
-  PatientInfoDialogComponent
+  PatientInfoDialogComponent, SendActionCardDialogComponent
 } from './gamemap/gamemap.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
@@ -57,6 +57,7 @@ import { ScoreComponent } from './score/score.component';
     MovePatientDialogComponent,
     PatientInfoDialogComponent,
     NotificationDialogComponent,
+    SendActionCardDialogComponent,
     InputDialogComponent,
     NurseComponent,
     ScoreComponent
@@ -91,7 +92,8 @@ import { ScoreComponent } from './score/score.component';
     MovePatientDialogComponent,
     PatientInfoDialogComponent,
     NotificationDialogComponent,
-    InputDialogComponent
+    InputDialogComponent,
+    SendActionCardDialogComponent
   ]
 })
 export class AppModule { }

@@ -140,29 +140,53 @@ module.exports = function(app) {
   		});
     });
 
+
     /**
      * Update a user
      */
-    app.post('/users/:id', function(req, res) {
+    app.post('/users/update', function(req, res) {
+      console.log("update the user");
 
-      User.findById(req.params.id, function(err, user) {
+      User.findById(req.body._id, function(err, user) {
 
         console.log('posting a user by id');
 
         if (err)
           return res.send({ message: 'error with request' });
 
-        user.points = req.body.user.points || 0;
-        user.name = req.body.user.name || '';
+        user.points = req.body.points;
+        user.location = req.body.location;
+        user.actions = req.body.actions;
+        user.patients = req.body.patient;
 
-  			user.save(function(err) {
+        // if(user.actions){
+        //     user.actions.push.apply(user.actions,req.body.actions);
+        // }
+        // else{
+        //     user.actions =[];
+        //
+        //     user.actions.push.apply(user.actions,req.body.user.actions);
+        // }
+        //
+        // if(user.patients){
+        //     user.patients.push.apply(user.patients,req.body.patients);
+        // }
+        // else{
+        //     user.patients = [];
+        //     user.patients.push.apply(user.patients,req.body.patients);
+        // }
 
-  				if (err) {
-            console.log('err', err);
-            return res.send({ message: 'error updating user' });
-          }
+  			user.save(function(err,newUser) {
+                console.log("user was updated");
+                console.log(newUser);
 
-            console.log('NO err');
+  			    if (err) {
+                  console.log('err', err);
+                  return res.send({ message: 'error updating user' });
+
+                }
+
+                console.log('NO err');
 
   				return res.send({ message: 'user updated!' });
   			});

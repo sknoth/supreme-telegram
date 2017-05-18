@@ -12,7 +12,7 @@ module.exports.createGame = function (scenarioId,user,callback) {
 
     //check if the game with this scenarioId 
     //create the game
-    console.log("create the game");
+
 
 
 
@@ -35,11 +35,11 @@ module.exports.createGame = function (scenarioId,user,callback) {
 
             game.save(function (error,result) {
                 if(!error){
-                    console.log(result);
-
+                    //console.log(result);
+                    console.log("game was created");
                     Game.findOne({_id:new ObjectId(result._id).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
                         if(!err){
-                            console.log(result.toString());
+                            //console.log(result.toString());
                             callback(result);
                         }
                     })
@@ -127,15 +127,23 @@ module.exports.leftGame = function (gameId,user,callback) {
 
 
 function getGameById(gameId,callback) {
+    console.log("get game by id " + gameId);
+
     Game.findOne({_id:new ObjectId(gameId).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
         if(!err){
-            console.log(result.toString());
+            //console.log(result.toString());
             callback(result);
         }
         else{
+            console.log("Could not find the game");
             console.log(err);
+            callback(null);
         }
     })
+}
+
+module.exports.getGame = function (gameId,callback) {
+    getGameById(gameId,callback);
 }
 
 

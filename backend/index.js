@@ -49,6 +49,37 @@ io.on('connection', function(socket) {
     console.log('user disconnected');
   });
 
+  socket.on('user-moved',function (message) {
+      console.log(message);
+      var data = message;
+
+      userCtrl.setLocation(data.userId,data.location,function (updatedUser) {
+          //get game
+          gameCtrl.getGame(data.gameId,function (updatedGame) {
+              io.emit('message',{topic:'update-game',data:updatedGame});
+          })
+      });
+
+  })
+
+  socket.on('action-card',function (message) {
+      console.log(message);
+      var data = message;
+
+      //update the user team
+      userCtrl.setTeam(data.userId,data.content,function (updatedUser) {
+          console.log(updatedUser);
+          //get game
+          gameCtrl.getGame(data.gameId,function (updatedGame) {
+              io.emit('message',{topic:'update-game',data:updatedGame});
+
+              io.emit('message',{topic:'action-card',data:{user:updatedUser,content:data.content}});
+          })
+
+      })
+
+
+  })
 
     socket.on('login',function (message) {
 
@@ -84,6 +115,13 @@ io.on('connection', function(socket) {
             //update the user with a team
 
             userCtrl.setTeam(data.user._id,team,function (result) {
+                if(result!=null){
+                    //console.log("success");
+                }
+
+            });
+
+            userCtrl.setLocation(data.user._id,{x:190+deltaX,y:320},function (result) {
                 if(result!=null){
                     //console.log("success");
                 }
@@ -167,7 +205,7 @@ io.on('connection', function(socket) {
 
         var data = JSON.parse(message);
 
-        console.log(data.user);
+        //console.log(data.user);
 
         //update the game
 
@@ -192,7 +230,7 @@ io.on('connection', function(socket) {
 
         //update the game
         gameCtrl.leftGame(data.gameId,data.user,function (updatedGame) {
-            console.log(updatedGame);
+            //console.log(updatedGame);
             io.emit('message',{topic:'update-game',data:updatedGame});
 
 

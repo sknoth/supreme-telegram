@@ -35,6 +35,7 @@ export interface Pagination {
 /*IUser*/
 
 export interface IUser {
+  _id?:string,
   name:string,
   surname:string,
   scenarioId?:string,

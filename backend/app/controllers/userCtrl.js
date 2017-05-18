@@ -43,3 +43,19 @@ module.exports.setTeam = function (userId,team,callback) {
           }
       })
 };
+
+
+module.exports.setLocation = function (userId,location,callback) {
+    User.findOne({_id:new ObjectId(userId.toString())},function (err,user) {
+        if(!err){
+            user.location = location;
+
+            user.save(function (err,updatedUser) {
+                callback(updatedUser);
+            })
+        }
+        else{
+            callback(null);
+        }
+    })
+};

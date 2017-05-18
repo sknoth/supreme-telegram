@@ -47,9 +47,10 @@
             {{user.role}}
 
           </div>
-
-          <div *ngFor="let team of game.teams">
-            {{team.team.name}}
+          <div *ngIf="game">
+            <div *ngFor="let team of game.teams">
+              {{team.team.name}}
+            </div>
           </div>
 
           <!--For LEADER-->
@@ -59,41 +60,47 @@
           <button  md-raised-button [hidden]="hideCallButton" md-button (click)="sidenav.open()">
                 Kontakta Andra Aktörer
           </button>
+
+          <!--For LEADER-->
+          <button [hidden]="hideActionButton" md-raised-button  (click)="sendActionsCardsDialog()">Send Action Cards</button>
+
+
         </aside>
 
-        <svg #hospital_map
-         x="0"
-         y="0"
-         width="100%"
-         height="100%"
-         version="1.1"
-         viewBox="0 0 600 450"
-         xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g>
-            <title>Hospital Map</title>
-            <image xlink:href="../assets/hospital_map.png"
-                   id="map_svg" height="450" width="600" (click)="mapClick($event)" />
-          </g>
-          <!--show leader figure-->
-          <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y"
-            fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
+            <svg #hospital_map *ngIf="game"
+             x="0"
+             y="0"
+             width="100%"
+             height="100%"
+             version="1.1"
+             viewBox="0 0 600 450"
+             xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g>
+                <title>Hospital Map</title>
+                <image xlink:href="../assets/hospital_map.png"
+                       id="map_svg" height="450" width="600" (click)="mapClick($event)" />
+              </g>
+              <!--show leader figure-->
+              <text [attr.x]="game.leader.location.x" [attr.y]="game.leader.location.y"
+                fill="blue" font-size="8" *ngIf="game.leader && game.leader.role=='LEADER'">{{game.leader.role}}</text>
 
-          <!--show teams figures-->
-          <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
+              <!--show teams figures-->
+              <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
 
-          <g *ngFor="let team of game.teams">
-             <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
-          </g>
+              <g *ngFor="let team of game.teams">
+                 <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
+              </g>
 
-          <!--show patients at ED before the accident-->
-          <g *ngFor="let patientEd of patientsAtED">
-            <image xlink:href="" [attr.xlink:href]="patientEd.imgUrl"
-                    height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
-            <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
-              font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
-          </g>
-        </svg>
+              <!--show patients at ED before the accident-->
+              <g *ngFor="let patientEd of patientsAtED">
+                <image xlink:href="" [attr.xlink:href]="patientEd.imgUrl"
+                        height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
+                <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
+                  font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
+              </g>
+            </svg>
+
       </div>
 
     </md-sidenav-container>
