@@ -22,7 +22,7 @@ import { IUser } from "../admin.interfaces";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 
 import {MdDialog, MdDialogRef} from '@angular/material';
-
+import { LocalStorageService } from 'angular-2-local-storage';
 
 
 @Component({
@@ -54,7 +54,8 @@ export class RolesComponent implements OnInit {
     private _gameStore: GameStore,
     private router: Router,
     private route: ActivatedRoute,
-    public dialog: MdDialog
+    public dialog: MdDialog,
+    private _localStorageService: LocalStorageService
   ) {
 
     this._chatService.connect();
@@ -74,12 +75,29 @@ export class RolesComponent implements OnInit {
 
 
     //reading route parameters
+    if( this._localStorageService.get("name")){
+      console.log("get data from local storage");
+      this.name = this._localStorageService.get("name") as string;
+      this.surname = this._localStorageService.get("surname") as string;
+      this.scenarioId =  this._localStorageService.get("scenarioId") as string;
+      this.location = {x:0,y:0};
+
+    }
+    else{
+
+      console.log("get data from route params");
     this.route.params.subscribe(params => {
       this.name = params['name'];
       this.surname = params['surname'];
       this.scenarioId = params['scenario'];
       this.location = {x:0,y:0};
-    })
+
+      this._localStorageService.set("name",params['name']);
+      this._localStorageService.set("surname",params['surname']);
+      this._localStorageService.set("scenarioId", params['scenario']);
+
+       });
+    }
 
     this._gameStore.game.debounceTime(1000).subscribe((game) => {
       console.log('Game in Roles cmp', game);
@@ -130,7 +148,8 @@ export class RolesComponent implements OnInit {
       scenarioId:this.scenarioId,
       role:this.role,
       location:this.location
-    }
+    };
+    console.log(user);
 
     //create user
     this._userService.addUser(user).subscribe((v)=>{

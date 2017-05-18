@@ -10,7 +10,7 @@ import {
 import { UserService } from '../user.service';
 import {AdminService} from '../admin.service';
 import {IPatient, IScenario, IUser} from "../admin.interfaces";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MovePatientDialogComponent} from "../gamemap/gamemap.component";
 import {MdDialog} from "@angular/material";
@@ -32,7 +32,7 @@ export class NurseComponent implements OnInit {
 
 
   constructor(
-     private router: Router, private _userService:UserService,public _fb: FormBuilder,public dialog: MdDialog
+     private router: Router, private route: ActivatedRoute,private _userService:UserService,public _fb: FormBuilder,public dialog: MdDialog
   ) {
 
     this.treatmentsForm = this._fb.group({
@@ -57,8 +57,17 @@ export class NurseComponent implements OnInit {
 
     this.user = _userService.getUser();
 
+
+    this.route.params.subscribe(params => {
+      this.room = params['room'];
+      //this.patient = params['patientId'];
+      console.log(params['patientId']);
+    })
+
+
     //for testing
-    this.room = "Akut 1"
+   // this.room = "Akut 1";
+
     this.patient = {
       scenarioId:"id",
       identificator:"Patient A",
@@ -96,6 +105,7 @@ export class NurseComponent implements OnInit {
       coordinates:{x:230,y:382},
       imgUrl:"../assets/YELLOW.png"
     };
+
   }
 
   ngOnInit() {

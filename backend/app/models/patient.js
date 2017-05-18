@@ -19,7 +19,9 @@ var patientSchema = mongoose.Schema({
     circulation:Object,//similar to breathing see table from the scenario + casuality card
     disability:Object,//similar to breathing see table from the scenario + casuality card
     exposure:Object,//similar to breathing see table from the scenario + casuality card
-
+    coordinates:{type:{x:Number,y:Number},default:{x:259,y:83}}, // coordinates where the patients are located in the game, default is ED
+    visibility:{type:String,default:"hidden"},
+    imgUrl:String,
 
     /**Updated fields**/
     provided_treatments:[],// list of treatments has been chosen by a nurse/team

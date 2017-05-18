@@ -37,12 +37,17 @@ module.exports.createGame = function (scenarioId,user,callback) {
                 if(!error){
                     //console.log(result);
                     console.log("game was created");
-                    Game.findOne({_id:new ObjectId(result._id).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
-                        if(!err){
-                            //console.log(result.toString());
-                            callback(result);
-                        }
+
+                    getGameById(result._id,function (updatedGame) {
+                        callback(updatedGame);
                     })
+
+                    // Game.findOne({_id:new ObjectId(result._id).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
+                    //     if(!err){
+                    //         //console.log(result.toString());
+                    //         callback(result);
+                    //     }
+                    // })
 
                 }
                 else{
@@ -131,8 +136,17 @@ function getGameById(gameId,callback) {
 
     Game.findOne({_id:new ObjectId(gameId).toString()}).populate('leader').populate('teams').populate('scenario').exec(function (err,result) {
         if(!err){
+
+            Game.populate(result,{
+                path:'scenario.patients',
+                model:'Patient'
+            }, function (err,result2) {
+                console.log(result2);
+                callback(result2);
+            });
+
             //console.log(result.toString());
-            callback(result);
+
         }
         else{
             console.log("Could not find the game");

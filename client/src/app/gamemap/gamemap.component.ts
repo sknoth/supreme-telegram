@@ -8,6 +8,8 @@ import {IGame, IPatient, IUser} from "../admin.interfaces";
 
 import { GameStore } from '../state/game.store';
 
+import { LocalStorageService } from 'angular-2-local-storage';
+
 @Component({
   selector: 'app-gamemap',
   templateUrl: './gamemap.component.html',
@@ -24,12 +26,13 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
   title = "Waiting for other users to be logged in......";
   //in milliseonds
-  timeToshowASHET = 3000;//in 30 seconds
+  timeToshowASHET = 30000;//in 30 seconds
 
   //UI
   hideDebrifButton = true;
   hideCallButton = true;
   hideActionButton = true;
+
 
 
   // Sidemenu 9 buttons
@@ -40,6 +43,26 @@ export class GamemapComponent implements OnInit,AfterViewInit {
   //patients that are located in the hospital before the accident happened
   patientsAtED:IPatient[];
 
+  //location map
+  locationMap = {
+    "ED":{x:259,y:83},
+    "Akut1":{x:255,y:129},
+    "Akut2":{x:305,y:129},
+    "Room10":{x:350,y:129},
+    "Room11":{x:100,y:129},
+    "Room12":{x:76,y:129},
+    "Room13":{x:45,y:129},
+    "Room14":{x:310,y:200},
+    "Room15":{x:253,y:200},
+    "Room16":{x:110,y:200},
+    "Room17":{x:300,y:250},
+    "Room18":{x:253,y:250}
+
+
+  }
+
+
+
 
   constructor(
     private _userService: UserService,
@@ -48,19 +71,39 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog: MdDialog,
-    private _gameStore: GameStore) {
+    private _gameStore: GameStore,
+    private localStorageService:LocalStorageService) {
 
 
-      /*this._gameStore.game.subscribe((game) => {
-        this.game = game;
-      });*/
 
       this.timer = { minutes:"00", seconds:"00"};
+      localStorageService.clearAll();
+
+      if(!localStorageService.get("patientsED")){
+
+        localStorageService.set("patientsED",this.patientsAtED);
+      }
+      else{
+        this.patientsAtED = localStorageService.get("patientsED") as [IPatient];
+      }
 
       this.initPatientAtED();
 
-      this.user = _userService.getUser()
-      console.log(this.user);
+      if(!localStorageService.get("user")) {
+        localStorageService.set("user",_userService.getUser());
+        this.user = _userService.getUser();
+      }
+      else{
+        this.user = localStorageService.get("user") as IUser;
+      }
+
+      if(localStorageService.get("game")){
+        this.game = localStorageService.get("game") as IGame;
+      }
+
+
+
+
 
   }
 
@@ -72,8 +115,16 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       if(message['topic'] === "join-game") {
 
         console.log("Join Game");
+
         this.game = message['data'];
-        console.log(message['data']);
+        if(!this.localStorageService.get("game")) {
+          this.localStorageService.set("game",message['data']);
+
+        }
+        //this.startPatientToArrive();
+        //console.log(message['data']);
+
+
 
         if (this.game.isStarted) {
           this.title = "Game was already started...";
@@ -133,6 +184,7 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
       } else if (message['topic'] ==="update-game") {
         console.log("game was updated!");
+        console.log(message['data']);
         this.game = message['data'];
         console.log(this.game);
       }
@@ -142,15 +194,31 @@ export class GamemapComponent implements OnInit,AfterViewInit {
           if(this.user._id === message['data'].user._id){
             this.user = message['data'].user;
             //show action card dialog
-            this.openNotificationDialog("Action Card", "Your teams is " + message['data'].content);
+            this.openNotificationDialog("Action Card", "Your team is " + message['data'].content.name);
 
           }
-      };
+      }
+      else if(message['topic']==="receive-patient"){
+          console.log(message['data']);
+          if(this.user._id === message['data'].userId){
+            this.router.navigate(['/nurse', message['data'].room, message['data'].patient._id]);
+          }
+      }
+      else if (message['topic']==="move-ed-patient"){
+          console.log("move-ed-patient");
+          console.log(message['data']);
+
+          var oldPatient = this.patientsAtED.filter(patient=>patient.identificator===message['data'].identificator)[0];
+          //oldPatient = message['data'];
+          console.log(this.patientsAtED.indexOf(oldPatient));
+          var index = this.patientsAtED.indexOf(oldPatient);
+          this.patientsAtED[index] = message['data'];
+
+
+      }
 
     });
 
-    // make the gamemap view as in the paper prototype for leader
-    // make the gamemap view for nurses: visualize the map, users on the map, header is same as in leader gamemapview
 
   }
 
@@ -232,7 +300,90 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
 
   startPatientToArrive(){
+     //calculate the max time between the patients
+     var maxTime = (this.game.scenario.duration/this.game.scenario.nPatients)*60000; //in miliseonds
+     var minTime = 10000; //1 minute;
+     var arrivalTime = 1000;//3 seconds for first patient to be arrived at the ED
+     var counter = 0;
+     var locationMap = this.locationMap;
+     var game = this.game;
+     var chatService = this._chatService;
+     //check setInterval!!!
+     console.log( this.game.scenario.patients);
 
+    //  game.scenario.patients[counter].visibility = "visible";
+    //  game.scenario.patients[counter].locations.push("ED");
+    //  game.scenario.patients[counter].coordinates = locationMap.ED;
+    //  if(game.scenario.patients[counter].triage==="RED"){
+    //    game.scenario.patients[counter].imgUrl = "assets/red_patient.png";
+    //  }
+    //  else if(game.scenario.patients[counter].triage==="ORANGE"){
+    //    game.scenario.patients[counter].imgUrl = "assets/orange_patient.png";
+    //  }
+    //  else if(game.scenario.patients[counter].triage==="YELLOW"){
+    //    game.scenario.patients[counter].imgUrl = "assets/yellow_patient.png";
+    //  }
+    //  else if(game.scenario.patients[counter].triage==="GREEN"){
+    //    game.scenario.patients[counter].imgUrl = "assets/green_patient.png";
+    //  }
+    // chatService.sendMessage("update-patient",{gameId: game._id,patient: game.scenario.patients[counter]});
+
+    console.log( this.game.scenario.patients);
+
+     var nextPatient = function () {
+       clearInterval(patientTimer);
+       game.scenario.patients[counter].visibility = "visible";
+       game.scenario.patients[counter].locations.push("ED");
+       game.scenario.patients[counter].coordinates = locationMap.ED;
+       if(game.scenario.patients[counter].triage==="RED"){
+          game.scenario.patients[counter].imgUrl = "assets/red_patient.png";
+       }
+      else if(game.scenario.patients[counter].triage==="ORANGE"){
+      game.scenario.patients[counter].imgUrl = "assets/orange_patient.png";
+      }
+      else if(game.scenario.patients[counter].triage==="YELLOW"){
+      game.scenario.patients[counter].imgUrl = "assets/yellow_patient.png";
+      }
+      else if(game.scenario.patients[counter].triage==="GREEN"){
+      game.scenario.patients[counter].imgUrl = "assets/green_patient.png";
+      }
+       console.log( game.scenario.patients[counter].identificator);
+
+       //update patient
+       chatService.sendMessage("update-patient",{gameId: game._id,patient: game.scenario.patients[counter]});
+
+
+       //var arrivalTime = Math.floor(Math.random()*(maxTime-minTime+1)+minTime);
+       var arrivalTime = 20000;
+
+       console.log(arrivalTime);
+       counter++;
+
+       if(counter===game.scenario.patients.length){
+         console.log("stop patient arriving");
+         clearInterval(patientTimer);
+       }
+       else{
+         patientTimer = setInterval(nextPatient,arrivalTime);
+       }
+
+     };
+
+     var patientTimer = setInterval(nextPatient,arrivalTime);
+
+
+  }
+
+
+  patientClick(event,patientIdentificator){
+    console.log(patientIdentificator);
+
+    if(this.user.role === "LEADER"){
+      //show move patient dialog
+      var selectedPatient = this.game.scenario.patients.filter(item => item.identificator ===patientIdentificator)[0];
+      this.openAssignedPatientIdDialog(selectedPatient);
+
+    }
   }
 
   /**DIALOGS**/
@@ -251,17 +402,17 @@ export class GamemapComponent implements OnInit,AfterViewInit {
         //update the teams in the game
         if(dialogRef.componentInstance.card5){
           console.log(dialogRef.componentInstance.card5);
-          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card5,content:"Team1"});
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card5,content:{name:"Team1",doctor:this.user.team.doctor}});
 
         }
         if(dialogRef.componentInstance.card6){
           console.log(dialogRef.componentInstance.card6);
-          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card6,content:"Team2"});
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card6,content:{name:"Team2",doctor:this.user.team.doctor}});
 
         }
         if(dialogRef.componentInstance.card7){
           console.log(dialogRef.componentInstance.card7);
-          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card7,content:"Team3"});
+          this._chatService.sendMessage("action-card",{gameId:this.game._id,userId:dialogRef.componentInstance.card7,content:{name:"Team3",doctor:this.user.team.doctor}});
 
         }
 
@@ -276,7 +427,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
         this.user.location = {x:160,y:120};
         this._chatService.sendMessage("user-moved",{userId:this.user._id,location:this.user.location});
-
+        //ready to receive the patient
+        this.startPatientToArrive();
 
       }
       else{
@@ -360,6 +512,41 @@ export class GamemapComponent implements OnInit,AfterViewInit {
 
   }
 
+  openAssignedPatientIdDialog(patient) {
+
+    let dialogRef = this.dialog.open(AssignedPatientDialog);
+    dialogRef.componentInstance.patient = patient;
+    dialogRef.componentInstance.game = this.game;
+    dialogRef.componentInstance.rooms = Object.keys(this.locationMap);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if(result === "ok"){
+         console.log("ok");
+         console.log(dialogRef.componentInstance.team + " takes "  + dialogRef.componentInstance.room);
+         //move patient to the room
+         patient.coordinates = this.locationMap[dialogRef.componentInstance.room];
+         //move team to the room
+         var teamLocation = {x:patient.coordinates.x,y:patient.coordinates.y+30};
+
+         this._chatService.sendMessage("user-moved",{userId:dialogRef.componentInstance.team,location:teamLocation});
+
+         //notify the team
+        this._chatService.sendMessage("patient-assigned",{gameId: this.game._id,patient: patient,room:dialogRef.componentInstance.room,userId:dialogRef.componentInstance.team});
+
+         //update the patient and team location
+        patient.locations.push(dialogRef.componentInstance.room);
+
+        this._chatService.sendMessage("update-patient",{gameId: this.game._id,patient: patient});
+
+
+      }
+      else if(result === "cancel"){
+        console.log("cancel");
+      }
+
+    });
+  }
 
 
   openPatientIdDialog(patient) {
@@ -374,7 +561,13 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
         console.log(result);
         if(result === "move"){
-          this.openMovePatientDialog(patient.identificator);
+          if(this.user.role ==="LEADER"){
+
+          }
+          else{
+            this.openMovePatientDialog(patient.identificator);
+          }
+
         }
         else if(result === "abcde"){
           this.openPatientInfoDialog(patient);
@@ -395,6 +588,25 @@ export class GamemapComponent implements OnInit,AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result, pIdentificator, this.game);
       this.user.actions.push({name:"Moved Patient to " + result, time:new Date()});
+
+      if(result ==="corridor"){
+        var patient = this.patientsAtED.filter(patient=>patient.identificator===pIdentificator)[0];
+        patient.coordinates = {x:170,y:300};
+        patient.locations.push("Corridor");
+
+        this._chatService.sendMessage("update-ed-patient",{gameId: this.game._id,patient: patient});
+
+      }
+
+
+      if(result != "corridor" && result != "waitED"){
+        var patient = this.patientsAtED.filter(patient=>patient.identificator===pIdentificator)[0];
+        patient.locations.push(result);
+        patient.visibility = "hidden";
+
+        this._chatService.sendMessage("update-ed-patient",{gameId: this.game._id,patient: patient});
+      }
+
     });
 
   }
@@ -451,7 +663,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       /**Updated fields**/
       locations:["Room21"],
       coordinates:{x:230,y:382},
-      imgUrl:"../assets/YELLOW.png"
+      imgUrl:"../assets/YELLOW.png",
+      visibility:"visible"
     };
 
 
@@ -489,7 +702,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       /**Updated fields**/
       locations:["Room12"],
       coordinates:{x:76,y:113},
-      imgUrl:"../assets/GREEN.png"
+      imgUrl:"../assets/GREEN.png",
+      visibility:"visible"
     }
 
 
@@ -525,7 +739,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       /**Updated fields**/
       locations:["Room19"],
       coordinates:{x:299,y:382},
-      imgUrl:"../assets/YELLOW.png"
+      imgUrl:"../assets/YELLOW.png",
+      visibility:"visible"
     }
 
 
@@ -560,7 +775,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       /**Updated fields**/
       locations:["Room15"],
       coordinates:{x:253,y:210},
-      imgUrl:"../assets/YELLOW.png"
+      imgUrl:"../assets/YELLOW.png",
+      visibility:"visible"
     };
 
 
@@ -598,7 +814,8 @@ export class GamemapComponent implements OnInit,AfterViewInit {
       /**Updated fields**/
       locations:["Room18"],
       coordinates:{x:253,y:235},
-      imgUrl:"../assets/ORANGE.png"
+      imgUrl:"../assets/ORANGE.png",
+      visibility:"visible"
     };
     this.patientsAtED = [];
     this.patientsAtED.push(<IPatient>patient1);
@@ -707,5 +924,21 @@ export class SendActionCardDialogComponent {
 
 
 
-  constructor(public dialogRef: MdDialogRef<InputDialogComponent>) {}
+  constructor(public dialogRef: MdDialogRef<SendActionCardDialogComponent>) {}
+}
+
+
+@Component({
+  selector: 'app-assigned-patient-dialog',
+  templateUrl: './assignedPatientDialog.component.html'
+
+})
+export class AssignedPatientDialog {
+  game:IGame;
+  room:string; //the input that user provided
+  team:string;//the return value from button Send
+  patient:IPatient;
+  rooms:Object;
+
+  constructor(public dialogRef: MdDialogRef<AssignedPatientDialog>) {}
 }

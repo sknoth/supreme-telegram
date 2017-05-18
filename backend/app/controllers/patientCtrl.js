@@ -2,10 +2,11 @@
  * Created by asoadmin on 2017-04-28.
  */
 var Patient = require('../models/patient.js');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports.createPatient = function (req,callback) {
     console.log("Create patient");
-    console.log(req.body);
+    //console.log(req.body);
 
     var newPatient = new Patient();
     newPatient.identificator = req.body.identificator;
@@ -43,5 +44,32 @@ module.exports.createPatient = function (req,callback) {
             callback(null);
         }
     })
+
+};
+
+
+module.exports.updatePatient = function (patient,callback) {
+    console.log("Update patient");
+    console.log(patient);
+
+    Patient.findOne({_id:new ObjectId(patient._id.toString())},function (err,oldPatient) {
+       if(!err){
+           oldPatient.coordinates = patient.coordinates;
+           oldPatient.locations = patient.locations;
+           oldPatient.visibility = patient.visibility;
+           oldPatient.imgUrl = patient.imgUrl;
+           oldPatient.coordinates = patient.coordinates;
+           oldPatient.locations = patient.locations;
+
+
+           oldPatient.save(function (err,updatedPatient) {
+               if(!err){
+                   callback(updatedPatient);
+               }
+           })
+       }
+    });
+
+
 
 };

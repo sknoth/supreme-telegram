@@ -13,6 +13,7 @@ import { MdDataTableModule } from 'ng2-md-datatable';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
+  AssignedPatientDialog,
   GamemapComponent, InputDialogComponent, MovePatientDialogComponent, NotificationDialogComponent,
   PatientDialogComponent,
   PatientInfoDialogComponent, SendActionCardDialogComponent
@@ -33,15 +34,19 @@ import {AdminService} from "./admin.service";
 import { GameService } from "./game.service";
 
 
+
+
 //Material components used in this application
 import { MaterialModule } from '@angular/material';
 import {ChatService} from "./chat.service";
 import { GameStore } from "./state/game.store";
 import { ScoreComponent } from './score/score.component';
 
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 
 @NgModule({
+
   declarations: [
     AppComponent,
     GamemapComponent,
@@ -58,6 +63,7 @@ import { ScoreComponent } from './score/score.component';
     PatientInfoDialogComponent,
     NotificationDialogComponent,
     SendActionCardDialogComponent,
+    AssignedPatientDialog,
     InputDialogComponent,
     NurseComponent,
     ScoreComponent
@@ -73,6 +79,11 @@ import { ScoreComponent } from './score/score.component';
     MdlSelectModule,
     MdDataTableModule,
     BrowserAnimationsModule,
+    LocalStorageModule.withConfig({
+      prefix: 'my-app',
+      storageType: 'localStorage'
+    }),
+
 
     MaterialModule.forRoot() //deprecated!!!
 
@@ -83,6 +94,7 @@ import { ScoreComponent } from './score/score.component';
     ChatService,
     GameStore,
     GameService
+
   ],
   bootstrap: [AppComponent],
   entryComponents:[
@@ -93,7 +105,9 @@ import { ScoreComponent } from './score/score.component';
     PatientInfoDialogComponent,
     NotificationDialogComponent,
     InputDialogComponent,
-    SendActionCardDialogComponent
+    SendActionCardDialogComponent,
+    AssignedPatientDialog
+
   ]
 })
 export class AppModule { }

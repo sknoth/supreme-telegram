@@ -28,7 +28,7 @@ export class UserService {
   }
 
   getUser() {
-    console.log(this.user);
+    //console.log(this.user);
     return this.user;
   }
 

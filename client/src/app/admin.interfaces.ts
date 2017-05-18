@@ -76,7 +76,8 @@ export interface IPatient {
   teams?:[string], // teams that were assigned to this patient, we assume by default one team, but can be that two teams treat one patient
   locations?:[string],   //was send by nurse to Corridor,AVA,OP,IVA, X-REY, etc.
   coordinates?:{x:number,y:number},
-  imgUrl?:string
+  imgUrl?:string,
+  visibility?:string
 }
 
 export interface IAirway {

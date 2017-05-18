@@ -26,6 +26,8 @@ export class GameStore {
    }
 
 
+
+
    loadGame(id: any, callback?) {
      console.log('loadGame', id);
 

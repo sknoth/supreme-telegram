@@ -51,7 +51,7 @@ const routes: Routes = [
     component:RolesComponent
   },
   {
-    path:'nurse',
+    path:'nurse/:room/:patientId',
     component:NurseComponent
   },
   {

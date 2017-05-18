@@ -7,6 +7,7 @@ var io = require('socket.io')(http);
 
 var userCtrl = require('./app/controllers/userCtrl.js');
 var gameCtrl = require('./app/controllers/gameCtrl.js');
+var patientCtrl = require('./app/controllers/patientCtrl.js');
 
 /**
  * Enable CORS Requests across domains
@@ -60,7 +61,14 @@ io.on('connection', function(socket) {
           })
       });
 
-  })
+  });
+
+  socket.on('patient-assigned',function (message) {
+      console.log(message);
+      var data = message;
+      console.log(data.patient);
+      io.emit('message',{topic:'receive-patient',data:{patient:data.patient,room:data.room,userId:data.userId}});
+  });
 
   socket.on('action-card',function (message) {
       console.log(message);
@@ -78,6 +86,29 @@ io.on('connection', function(socket) {
 
       })
 
+
+  });
+
+  socket.on('update-patient',function (message) {
+      console.log(message);
+      var data = message;
+
+      //update the patient
+      console.log(data.gameId);
+      patientCtrl.updatePatient(data.patient,function (updatedPatient) {
+          //get game
+          gameCtrl.getGame(data.gameId,function (updatedGame) {
+              io.emit('message',{topic:'update-game',data:updatedGame});
+
+          })
+      });
+  });
+
+  socket.on('update-ed-patient',function (message) {
+      console.log(message);
+      var data = message;
+
+      io.emit('message',{topic:'move-ed-patient',data:data.patient});
 
   })
 
@@ -150,7 +181,7 @@ io.on('connection', function(socket) {
                             var minutes=Math.floor(countdown / 60);
                             var seconds=countdown % 60;
 
-                            setInterval(function() {
+                            var timer = setInterval(function() {
 
 
 
@@ -165,6 +196,7 @@ io.on('connection', function(socket) {
 
                                 if(minutes == 0){
                                     io.emit('message',{topic:'game-over',data:"GAME OVER"});
+                                    clearInterval(timer);
                                 }
 
 

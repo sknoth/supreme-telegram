@@ -48,8 +48,11 @@
 
           </div>
           <div *ngIf="game">
-            <div *ngFor="let team of game.teams">
-              {{team.team.name}}
+            <!--show available teams for leader-->
+            <div *ngIf="user.role=='LEADER'">
+              <div *ngFor="let team of game.teams">
+                {{team.team.name}}
+              </div>
             </div>
           </div>
 
@@ -89,16 +92,26 @@
               <!--<text [attr.x]="nurseImg.x" [attr.y]="nurseImg.y" fill="blue" font-size="8" *ngIf="user && user.role=='NURSE'">{{user.team.name}}</text>-->
 
               <g *ngFor="let team of game.teams">
-                 <text [attr.x]="team.team.x" [attr.y]="team.team.y" fill="blue" font-size="8" >{{team.team.name}}</text>
+                 <text [attr.x]="team.location.x" [attr.y]="team.location.y" fill="blue" font-size="8" >{{team.team.name}}</text>
               </g>
 
               <!--show patients at ED before the accident-->
               <g *ngFor="let patientEd of patientsAtED">
-                <image xlink:href="" [attr.xlink:href]="patientEd.imgUrl"
+                <image [attr.visibility]="patientEd.visibility" xlink:href="" [attr.xlink:href]="patientEd.imgUrl"
                         height="16" width="16"[attr.x]="patientEd.coordinates.x"  [attr.y]="patientEd.coordinates.y"  />
-                <text [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
+                <text [attr.visibility]="patientEd.visibility" [attr.x]="patientEd.coordinates.x +4" [attr.y]="patientEd.coordinates.y+10"
                   font-size="8" (click)="patientEdClick($event,patientEd.identificator)">{{patientEd.identificator}}</text>
               </g>
+
+
+              <!--show arrived patients-->
+              <g *ngFor="let patient of game.scenario.patients">
+                <image [attr.visibility]="patient.visibility" xlink:href="" [attr.xlink:href]="patient.imgUrl"
+                       height="16" width="16"[attr.x]="patient.coordinates.x"  [attr.y]="patient.coordinates.y" (click)="patientClick($event,patient.identificator)" />
+                <!--<text [attr.visibility]="patient.visibility" [attr.x]="patient.coordinates.x +4" [attr.y]="patient.coordinates.y+10"-->
+                      <!--font-size="8" (click)="patientClick($event,patient.identificator)">{{patient.identificator}}</text>-->
+              </g>
+
             </svg>
 
       </div>

@@ -15,15 +15,20 @@ export class ChatService {
   getMessages() {
 
     let observable = new Observable(observer => {
+      if(!this.socket) {
+        this.connect();
+      }
+        this.socket.on('message', (data) => {
+          observer.next(data);
+        });
 
-      this.socket.on('message', (data) => {
-        observer.next(data);
-      });
+        return () => {
+          console.log("disconnect");
+          this.socket.disconnect();
+        };
 
-      return () => {
-        console.log("disconnect");
-        this.socket.disconnect();
-      };
+
+
     })
 
     return observable;

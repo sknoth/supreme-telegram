@@ -1,0 +1,29 @@
+<h1 md-dialog-title>Decide the team and room for {{patient.identificator}}</h1>
+<table>
+  <tr>
+    <td>
+      <img src="{{patient.imgUrl}}" width="60" height="60">
+    </td>
+
+    <td>
+      <!--Teams-->
+      <md-select placeholder="Select Team" [(ngModel)]="team" class="input-full-width">
+        <md-option *ngFor="let team of game.teams" [value]="team._id">
+          {{team.team.name}} ( with {{team.team.doctor}} doctor)
+        </md-option>
+      </md-select>
+
+      <!--Rooms-->
+      <md-select placeholder="Select Room" [(ngModel)]="room" class="input-full-width">
+        <md-option *ngFor="let room of rooms" [value]="room">
+          {{room}}
+        </md-option>
+      </md-select>
+
+    </td>
+  </tr>
+</table>
+<div md-dialog-actions>
+  <button md-button md-raised-button (click)="dialogRef.close('ok')">OK</button>
+  <button md-button md-raised-button (click)="dialogRef.close('cancel')">CANCEL</button>
+</div>
